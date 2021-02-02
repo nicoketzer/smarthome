@@ -1,0 +1,75 @@
+MySql:
+-Benutzer-TBL:
+Hier wird die Benutzerkennung gespeichert.
+U.a. der Benutzername+PW, der aktuelle login-token die Token-Zeit die Email.
+Zudem erfolgt hier die Zuordnung welchen Gruppen der Benutzer zugeteilt ist
+
+-Geräte-TBL:
+Hier werden alle Verfügbaren Geräte hinterlegt.
+Jedes Gerät bekommt:
+Einen Namen + eine ID (->ID ist für Rechtesystem und Name zum Anzeigen)
+Einen C&C-Server zugeteilt + Zugangstoken
+
+-Rechte-TBL:
+In der Rechte-TBL wird festgelegt welche(r) Gruppe/Benutzer auf welches Gerät Zugriff hat
+Für Gruppen:
+bei Gruppen wird der Benutzer "*" verwendet
+Für Benutzer:
+bei Benutzern wird die Gruppe "*" verwendet
+
+-->Alle Felder mit "*" werden ignoriert außer:
+"*" bei Geräte-ID bedeutet das man auf jedes Gerät Zugriff hat (z.B. Admin-Gruppe/Admin-Account)
+
+-token_action-TBL:
+Hier werden alle C&C-Server-Tokens mit entsprechender Aktion gespeichert.
+Im feld Token befindet sich der eigentliche Token.
+Im Feld action wird die Aktion selber definiert --> Im Feld action_type wird der Aktionstyp genauer definiert
+
+-cc_server-TBL:
+Hier werden verschiedene Konfig-Datein für den CC-Server abgelegt (z.B. Token der zur IP-Aktualisierung verwendet werden soll)
+server = server-ip/ddns-adresse
+type = definiert um welche art von token es sich handelt
+token = enthält den eig. token
+
+C&C Server:
+Es kann innerhalb eines Webinterface mehrere C&C Server geben(z.B. weil zwei Verschiedene Häuser vorhanden sind)
+Der C&C Server ist ein Webserver der bei Übergabe eines existierenden Geräte-Tokens 
+eine für den Token hinterlegte aktion ausführt. 
+Wenn man im Webinterface als Admin eingelogt ist oder der Gruppe Admin angehört muss ein Punkt 
+"C&C Server" aufploppen. Hier müssen alle C&C-Server aufgelistet werden.
+
+Ein C&C-Server gibt nach aufsetzen einen Bind-Token aus. Über die Adresse des C&C-Server (und evtl Port) und den entsprechenden 
+Bind-Tokens kann ein neuer C&C-Server hinzugefügt werden.
+
+Ist ein C&C-Server hinzugefügt worden so müssen anschließend Zugangsdaten für MySql(i) übermittelt werden.
+
+Der C&C-Server holt sich aus der "token_action"-TBL die entsprechende Aktion für einen Token und führt diese lokal 
+in seinem Netzwerk aus.
+
+Ein C&C-Server meldet auserdem an den Hauptserver alle 30 Minuten die Aktuelle IP-Adresse damit die Verbindung nicht abbricht. 
+Hierbei wird ein extra Token verwendet der im Webinterface für jeden C&C-Server generiert werden muss. Dieser wird dann 
+autom. in der cc_server-TBL abgelegt
+
+Ein C&C-Server ist meistens ein Raspberry-PI mit RaspbianOS
+
+Gerät:
+Ein Gerät kann Local im Netzwerk immer über deren Eigene IP angesteuert werden.
+Ein Gerät erhält ansonsten ausschließlich anweißungen vom zuständigen C&C-Server. 
+Portfreigaben etc. die direkt auf das Gerät zeigen sind nicht notwendig und auch nicht erwünscht!
+Im Webinterface können einzelne Aktionen für ein Gerät hinzugefügt werden. Wichtig ist das der 
+Befehl der ausgeführt wird local funktionieren muss bzw. das gerät dafür fähig sein muss.
+
+Ein neues Gerät wird immer über einen C&C-Server server hinzugefügt.
+
+
+Momentane Probleme:
+Ein Gerät kann immer nur eine Aktion haben da immer ein cc_token hinzugefügt werden muss. 
+Evtl weiter Spalte die einen Token für das gerät hinzufügt und dann wird ein Token für das Gerät und ein Token für die 
+Aktion die gemacht werden soll übermittelt
+
+Es gibt von C&C-Server keine Autom. Suche nach neuen Geräten
+
+Es gibt keine Update-Funktion für den C&C Server
+
+
+
