@@ -1,0 +1,15 @@
+Webinterface:
+Eigene Sachen Lizenz: MIT License
+PHPMailer:
+Bilder: Unsplash.com Lizenz: https://unsplash.com/license
+
+C&C-Server:
+Eigene Sachen Lizenz: MIT License
+Betriebssystem (RaspberryPI-OS): https://www.raspberrypi.org
+Apache2-Server: https://www.apache.org/licenses/
+PHP(allgemein): https://www.php.net/license/ 
+
+Geräte:
+Eigene Sachen Lizenz: MIT License
+Arduino(IDE): https://www.arduino.cc/en/Main/CopyrightNotice
+Ansonsten eig. Keine
