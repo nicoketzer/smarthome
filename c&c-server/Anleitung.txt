@@ -1,0 +1,33 @@
+[ANLEITUNG NOCH UNVOLLSTÄNDIG]
+
+Was wird benötigt?
+Ein Raspberry PI (die minimal empfohlene Version ist der Raspi 3b)
+Eine SD Karte
+Ein Netzteil für den Raspi
+Eine Netzwerk&Internet-Verbindung
+
+Vorbereitung:
+Lade dir die neuste Version von Raspberry PI OS (vorzugsweiße die "-lite" Verion) herunter.
+Flashe sie mit einem Tool (z.B. Etcher) auf einen die SD-Karte
+Entferne nach den Flashen die SD-Karte und stecke sie anschließend wieder ein.
+Es öffnet sich ein Windows-Explorer Fenster mit der Partition "boot"
+Erstelle hier eine Datei namens "ssh" (!WICHTIG! ohne .txt oder sonst was nur "ssh" mehr nicht)
+Die Datei muss leer bleiben.
+
+Stecke die SD-Karte in den Raspi.
+Stecke das Netzteil an und stell eine Netzwerkverbindung via LAN her.
+
+Installation C&C-Server:
+1. Finde die IP deines Raspi´s (z.B. über deinen Router) heraus
+2. Lade dir Putty oder ein Vergleichbares SSH-Tool herunter
+3. Öffnet Putty und gib die IP deines Raspi´s ein und drücke enter
+4. Gib anschließend "pi" ein und drücke ENTER
+5. Das Passwort für den Benutzer "pi" lautet "raspberry"
+6. Da du jetzt eingelogt ist führe den Befehl "passwd" aus und lege ein neues Passwort für den Benutzer PI fest
+7. Logge dich als Root mit "sudo -i" ein
+8. Update deinen PI mit dem Befehl "apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y && apt-get full-upgrade -y"
+9. Ist dieser Befehl durchgelaufen so Installiere Apache2 und PHP mit dem Befehl "apt-get install apache2 php -y"
+10. Gehe in das Verzeichnis "/var/www/html" (Standart-Verzeichnis von Apache2-Webserver)
+
+
+[--AB HIER UNDOKUMENTIERT--]
