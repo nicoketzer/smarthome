@@ -1,0 +1,25 @@
+@media print{
+  #nav{
+    display: none;
+  }
+  #nav_space{
+    height: 10px;
+    display: block;
+    width: 100%;
+  }
+  #footer{
+    display: none;
+  }
+  *{
+    background: white !important;
+    width: 100% !important;
+    height: auto !important;
+    text-align: justify;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #content{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+}

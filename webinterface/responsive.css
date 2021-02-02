@@ -1,0 +1,326 @@
+@media screen and (max-width: 1500px){
+  #digital_header{
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #digital_h_u,#digital_u{
+    font-size: 4vw;
+    line-height: 5.7vw;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  #digital_h_t,#digital_text{
+    font-size: 2vw;
+    line-height: 2.6vw;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  #digital_text,#digital_u{
+    margin: 0;
+  }
+  #header{
+    font-size: 3.5vw;
+    line-height: 5vw;
+  }
+  #header_button{
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  #impressum_all_inner,#datenschutz_all_inner{
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  #impressum_all,,#datenschutz_all{
+    padding: 0;
+    padding-top: 40px;
+  }
+}
+@media screen and (max-width: 1000px) {
+  #datenschutz_header_u{
+    font-size: 6vw;
+  }
+  #datenschutz_content_u,#datenschutz_hinweis_u,#agb_content_u,#digital_h_u{
+    font-size: 3vw;
+  }
+  #datenschutz_header_t{
+    font-size: 2.2vw;
+  }
+  #datenschutz_content_t,#agb_content_t,#digital_h_t{
+    font-size: 2vw;
+    margin-bottom: 3px;
+    padding: 2px;
+  }
+  #digital_header{
+    margin: 0;
+    padding: 0;
+    padding-top: 40px;
+    padding-bottom: 120px;
+  }
+  #digital_h_u{
+    font-size: 5vw;
+    line-height: 6.7vw;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  #digital_h_t{
+    font-size: 3vw;
+    line-height: 3.6vw;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  #datenschutz_content ul li{
+    font-size: 2vw;
+  }
+  #agb_content_u{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    line-height: 4vw;
+  }
+  #agb_content_t{
+    line-height: 4vw
+  }
+  #capa_ber,#software{
+    width: 100% !important;
+  }
+  #login_inner,#regis_inner{
+    margin-left: 20% !important;
+    margin-right: 20% !important;
+  }
+  #info_all_inner,#a_boni_all_inner,#ueber_all_inner,#beratung_all_inner,#update_header,#update,#impressum_all_inner,#datenschutz_all_inner,#agb_all_inner{
+    margin-left: 10% !important;
+    margin-right: 10% !important;
+    width: auto;
+  }
+  #impressum_all,#agb_all{
+    padding: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  #impressum_haftung,#impressum_data,#impressum_kontakt{
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  #u_header_u,#agb_header{
+    font-size: 4.5vw;
+  } 
+  #u_header_text{
+    font-size: 4vw;
+    padding-bottom: 10px;
+  }
+  #update{
+    display: block;
+  }
+  #update_prev,#update_next{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  #make,#made,#impressum_header_u,#impressum_h_u_b{
+    font-size: 5vw;
+  }
+  #update_prev li, #update_next li, #impressum_header_t,#impressum_h_u{
+    font-size: 4vw;
+    line-height: 4.1vw;
+    width: 100%;
+    text-align: left;
+    margin-top: 1px;
+  }
+  #impressum_data p,#impressum_kontakt p,#impressum_h_t,#agb_content_begriffe p{
+    font-size: 2.8vw;
+    line-height: 3.1vw;
+  }
+  #impressum_header_t{
+    text-align: center;
+  }
+  #k_header_under_img,#a_boni_header,#ueber_header,#beratung_header,#impressum_header{
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center;
+  }
+  #impressum_header{
+    padding: 0;
+  }
+  #k_header_img{
+    margin-left: 10%;
+    margin-right: 10%;
+    display: block;
+    width: 80%;
+  }
+  #kontakt_info{
+    text-align: center;
+    padding: 0;
+  }
+  #kontakt_info p{
+    padding: 5px;
+  }
+  #vision,#kunden,#history{
+    margin: 20px !important;
+  }
+  #power_u{
+    font-size: 7vw;
+    line-height: 7.3vw;
+    margin: 0;
+    padding-bottom: 0;
+  }
+  #power_t_img{
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+  #power_button{
+    margin-left: 20%;
+    margin-right: 20%;
+    width: auto;
+  }
+   #header{
+    font-size: 5vw;
+    line-height: 10vw;
+  }
+  #header_text{
+    font-size: 3.2vw;
+    line-height: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  #header_button{
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 22px;
+  }
+  #header_button:hover{
+    font-size: 23px;
+  }
+  #header_big{
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  #header_bottom,#header_top{
+    display: block;
+  }
+}
+@media screen and (max-width: 800px){
+  #nav_space{
+    display: none;
+  }
+  #login_inner,#regis_inner{
+    margin-left: 15% !important;
+    margin-right: 15% !important;
+  }
+  #msg_self{
+    margin-left: 10%;
+    margin-right: 10%;
+    width: auto;
+  }
+  #nav,#footer_nav{
+    position: relative !important;
+    display: block;
+    padding-bottom: 20px;
+  }
+  #nav_self a,#footer_nav a{
+    display: block;
+    width: 100%;
+    padding: 5px;
+  }
+  #title{
+    margin: auto auto auto auto;
+    padding: 10px;
+  }
+  #nav_buy{
+    margin: auto auto auto auto;
+  }
+}
+@media screen and (max-width: 1412px){
+  #digital_content{
+    padding-left: 8vw;
+    padding-right: 8vw;
+  }
+}
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    #digital_header{
+    margin: 0;
+    padding: 0;
+    padding-top: 40px;
+    padding-bottom: 120px;
+  }
+  #digital_h_u{
+    font-size: 5.3vw;
+    line-height: 6.7vw;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+  #digital_h_t{
+    font-size: 3vw;
+    line-height: 4.6vw;
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  .col-25,.col-75,.k_data_input button,#k_data_law{
+    width: 100% !important;
+    margin-top: 0;
+  }
+  .k_data_input button{
+    float: none;
+    display: block;
+  }
+  #k_data_law{
+    margin-left: 0;
+  }
+  #info_header,#a_boni_header,#ueber_header,#beratung_header{
+    margin-bottom: 10px;
+    font-size: 6vw;
+    line-height: 6.5vw;
+  }
+  #info_u,#a_boni_u,#ueber_u,#beratung_u,#impressum{
+    font-size: 5.3vw;
+    line-height: 5.7vw;
+  }
+  #info_t,#a_boni_t,#ueber_t,#beratung_t{
+    font-size: 4vw;
+    line-height: 4.5vw;
+  }
+  #work_big{
+    font-size: 7vw;
+    line-height: 4vw;
+  }
+  #power_t p{
+    font-size: 6vw;
+    line-height: 6.5vw;
+  }
+  #work_text{
+    font-size: 5vw;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  #work_start{
+    margin-left: 30%;
+    margin-right: 30%;
+  }
+  #vision,#kunden,#history{
+    display: block;
+    margin-left: 40px !important;
+    margin-right: 40px !important;
+    text-align: center;
+  }
+  #hr{
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+}
+@media screen and (max-width: 400px){
+   #header{
+    font-size: 6.5vw;
+    line-height: 11vw;
+  }
+  #header_text{
+    font-size: 6vw;
+    line-height: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  #work_big{
+    line-height: 0vw;
+    margin: 0px;
+    padding: 0px;
+  }
+}
