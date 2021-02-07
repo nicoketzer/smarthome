@@ -1,0 +1,1 @@
+pin 5 = opto_ausgang (3 von links)
