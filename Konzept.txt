@@ -31,6 +31,11 @@ server = server-ip/ddns-adresse
 type = definiert um welche art von token es sich handelt
 token = enthält den eig. token
 
+-router-dev-TBL:
+Hier werden alle Geräte aus dem Router gespeichert und der aktuelle Status (online/offline) gespeichert.
+Aufgaben die Verbunden sind mit den Status eines Geräts können angelegt werden.
+Auserdem wird der C&C Server (bzw. der Token) gespeichert damit mehrere Netzwerke behandelt werden können
+
 C&C Server:
 Es kann innerhalb eines Webinterface mehrere C&C Server geben(z.B. weil zwei Verschiedene Häuser vorhanden sind)
 Der C&C Server ist ein Webserver der bei Übergabe eines existierenden Geräte-Tokens 
