@@ -2,6 +2,7 @@
     //Infos
     #Javascript und CSS werden von Github bezogen sodass nur eine Datei gebraucht wird
     #Internetverbindung wird gebraucht
+    include("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
 ?>
 <html>
     <head>
