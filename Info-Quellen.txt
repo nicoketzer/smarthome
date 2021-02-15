@@ -1,0 +1,2 @@
+Gute Linksammlung für TR-064 Schnittstelle der Fritz!Box:
+https://noxmiles.de/linksammlung-zum-thema-api-der-avm-fritzbox-ueber-upnp/
