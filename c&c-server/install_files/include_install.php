@@ -53,11 +53,13 @@ function get_bind_token(){
     if(!file_exists($bind_token_file)){
         //Es existiert kein Bind-Token
         write_file($bind_token_file,$bind_token,"w");
+        return true;
     }else{
         //Die Datei existiert es kann aber sein das sie mit dem Standart-Bind Token "0000" gefüllt ist
         //um das rauszufinden muss sie geöffnet und ausgelesen werden
         if(read_file($bind_token_file) == "0000"){
-            write_file($bind_token_file,$bind_token,"w");    
+            write_file($bind_token_file,$bind_token,"w");
+            return true;    
         }else{
             //Es existiert schon ein Bind-Token
             return false;
@@ -72,6 +74,7 @@ function get_bind_token(){
 function remote_read($url){
     
 }
+<<<<<<< Updated upstream
 function generate_non_existing_dirs($local_file){
     
 }
@@ -88,5 +91,60 @@ function download(){
     foreach($file_list as $file){
         download_now($file);
     }
+=======
+function new_install(){
+    //Hier überprüfung einbauen ob schon eine Installation vorhanden ist
+    if(is_file("./LICENSE") || is_dir("./res") || is_file("./index.php") || is_file("./work.php")){
+        //Wenn eine dieser Datein/Ordner existiert ist es keine neue installation mehr
+        return false;
+    }else{
+        //Nichts vorhanden --> Neue installation
+        return true;
+    }
+}
+function set_stage($stage){
+    write_file("stage",$stage,"w");
+}
+//Main-Funktion
+function do_install(){
+    //Als erstes alles Downloaden und entpacken lassen
+    if(new_install()){
+        if(download()){
+            //Jetzt sind alle Datein soweit Verfügbar
+            #Anschließend neuen Bind-Token erstellen
+            if(get_bind_token()){
+                //Bind Token Fertig
+                set_stage(1);   
+            }else{
+                //Es konnte kein neuer Bind-Token erzeugt werden
+                echo "Die installation kann keinen neuen Bind-Token erzeugen. Fehlschlag!";
+            }            
+        }else{
+            //Download oder Entpacken fehlgeschlagen
+            echo "Die installation konnte nicht gestartet werden da der Download fehlschlug";    
+        } 
+    }else{
+        echo "install.php kann hier nicht mehr ausgef&uuml;hrt werden";
+        unlink("install.php");
+    }   
+>>>>>>> Stashed changes
+}
+function self_test($url){
+    $options = array();
+    $context = stream_context_create($options);
+    $back = file_get_contents($url,false,$context);
+    if($back == "ok"){
+        //Ist erreichbar
+        set_stage("5");
+    }else{
+        echo "Die IP-Adresse und der Port f&uuml;hren nicht zu diesen Server. Bitte Versuche es erneut".
+        echo "Mit dem anh&auml;ngen von ?skip_stage=true an den URL &uuml;berspringst du diesen Test";
+    }    
+}
+function finish_install(){
+    //Alle Installationsdatein löschen
+    unlink("install.php");
+    unlink("self_test_url");
+    
 }
 ?>
