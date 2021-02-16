@@ -54,3 +54,70 @@ function get_all_data(){
         },1000);
     }
 }
+
+//Nachrichten-Funktionen
+function show_msg(string1,string2,dismiss){
+    if(getCookie("msg_shown") == "" || getCookie("msg_shown") == "false"){
+        //GET EL
+        var text_u = _("msg_text_u");
+        var text_text = _("msg_text_text");
+        var button_dism = _("msg_btn");
+        //RESET ALL
+        text_u.innerHTML = text_text.innerHTML = "";
+        button_dism.disabled = null;
+        //SET NEW
+        text_u.innerHTML = string1;
+        text_text.innerHTML = string2;
+        button_dism.disabled = !dismiss;
+        //Einblenden
+        _("msg_all").style.display = "block";
+        document.getElementsByTagName("body")[0].style.overflow = "hidden";
+        setCookie("msg_shown","true",1);
+    }else{
+        //WAIT TILL PREV MSG IS CLOSED
+        setTimeout(function(){
+            show_msg(string1,string2,dismiss);
+        },500);
+    }
+}
+function close_msg(){
+    if(side_on){
+        var state = _("msg_btn").disabled;
+        if(!state){
+            var a = getCookie("mouse_over_close");
+            var b = $("#msg_self:hover").length;
+            if(!b || a == "true"){
+                document.getElementsByTagName("body")[0].style.overflow = "";
+                _("msg_all").style.display = "none";
+                setCookie("msg_shown","false",1);
+            }
+        }
+    }
+}
+function f_close_msg(){
+    _("msg_btn").disabled = false;
+    setCookie("mouse_over_close","true",1);
+    close_msg();
+    setCookie("mouse_over_close","",-1);
+}
+//Cookie-Funktionen
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/;domain=german-backup.de;SameSite=Strict;Secure";
+}
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
