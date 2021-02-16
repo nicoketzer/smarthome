@@ -33,8 +33,9 @@ token = enthält den eig. token
 
 -router-dev-TBL:
 Hier werden alle Geräte aus dem Router gespeichert und der aktuelle Status (online/offline) gespeichert.
-Aufgaben die Verbunden sind mit den Status eines Geräts können angelegt werden.
-Auserdem wird der C&C Server (bzw. der Token) gespeichert damit mehrere Netzwerke behandelt werden können
+Aufgaben die Verbunden sind mit den Status eines Geräts können angelegt werden. Die Erstellungszeit/Update-Zeit wird gespeichert.
+Auserdem wird der C&C Server (bzw. der Token) gespeichert damit mehrere Netzwerke behandelt werden können wenn den C&C-Server 
+noch keine ID zugeteilt wurde taucht der C&C-Servertoken "0000" auf. Diese werden nach 24h gelöscht
 
 C&C Server:
 Es kann innerhalb eines Webinterface mehrere C&C Server geben(z.B. weil zwei Verschiedene Häuser vorhanden sind)
