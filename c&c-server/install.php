@@ -62,5 +62,15 @@
         und immer die neuste Version verwendet wird.</p>
         <p>Gerade wurde alle geforderten Datein f&uuml;r den C&amp;C-Server heruntergeladen.</p>
         <button id="button" onclick="start_install()">OK, Installation auf diesen Server starten!</button>
+        <div id="error"></div>
+        <div id="msg_all" onclick="close_msg()">
+            <div id="msg_self">
+                <div id="msg_top">
+                    <p id="msg_text_u"></p>
+                    <button id="msg_btn" type="button" disabled="" onclick="close_msg()" onmouseover="setCookie('mouse_over_close','true',1)" onmouseout="setCookie('mouse_over_close','',-1)">X</button>
+                </div>
+                <p id="msg_text_text"></p>
+            </div>
+        </div>
     </body>
 </html>
