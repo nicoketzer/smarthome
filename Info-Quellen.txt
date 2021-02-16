@@ -1,2 +1,5 @@
 Gute Linksammlung für TR-064 Schnittstelle der Fritz!Box:
 https://noxmiles.de/linksammlung-zum-thema-api-der-avm-fritzbox-ueber-upnp/
+
+Beschreibung wie man mehr oder weniger Crontab dazu bringen kann mehr alls 1mal pro Min einen Befehl auszuführen:
+https://www.kh2004.de/tipps/crontab-befehle-alle-x-sekunden-ausfuehren/
