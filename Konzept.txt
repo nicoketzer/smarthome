@@ -37,6 +37,10 @@ Aufgaben die Verbunden sind mit den Status eines Geräts können angelegt werden
 Auserdem wird der C&C Server (bzw. der Token) gespeichert damit mehrere Netzwerke behandelt werden können wenn den C&C-Server 
 noch keine ID zugeteilt wurde taucht der C&C-Servertoken "0000" auf. Diese werden nach 24h gelöscht
 
+-router-dev-error-TBL:
+Hier werden alle Fehler-Geräte aufgelistet (z.B. doppelter Hostname etc)
+-->Wird ebenfalls mit router-dev geupdatet. Enthält den C&C-Server, Hostnamen und Typ des Fehlers (1 = doppelter hostname)
+
 C&C Server:
 Es kann innerhalb eines Webinterface mehrere C&C Server geben(z.B. weil zwei Verschiedene Häuser vorhanden sind)
 Der C&C Server ist ein Webserver der bei Übergabe eines existierenden Geräte-Tokens 
