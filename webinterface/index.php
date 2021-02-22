@@ -1,4 +1,7 @@
-<?php 
+<?php
+    //Include von allem
+    include("/res/all.php");
+    //Normaler Code 
     if(isset($_POST["login"])){
         $login = $_POST['login'];
         if($login == "true"){
