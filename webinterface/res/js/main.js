@@ -78,15 +78,83 @@ function check_login(){
     }
 }
 var side_on = true;
+function load_site(site){
+    $.post("/work.php","site="+site,function(res){
+        var tmp = JSON.parse(res);
+        var suc = tmp.suc;
+        if(suc == "true"){
+            //Abfrage hat funktioniert
+            var html = tmp.html;
+            _("content").innerHTML = html;
+        }else{
+            var title = tmp.title;
+            var text = tmp.text;
+            var can_close = tmp.can_close;
+            if(can_close == "true"){
+                can_close = true;
+            }else{
+                can_close = false;
+            }
+            //Alles schließen
+            f_close_msg();
+            //Ausgabe
+            show_msg(title,text,can_close);
+        }        
+    },"JSON").fail(function(a,b,c){
+        console.log(a);
+        console.log(b);
+        console.log(c);
+        console.log("ERROR WHILE LOADING SITE");
+        f_close_msg();
+        show_msg("Fehler","Beim laden der Seite "+site+" trat ein Fehler auf",false);
+        //Dymo wird nicht mehr gestartet und somit die Funktion der Seite ausgesetzt
+        //Also wird auch side_on auf false gesetzt
+        side_on = false;
+    });    
+}
+function dymo(){
+    if(side_on){
+        var url = get_url();
+        if(getCookie("last_page") != ""){
+            if(getCookie("last_page") == url){
+                //Es hat sich nichts geändert also kein Update
+                //Warten für 100ms dann erneut schauen
+                setTimeout(function(){
+                    dymo();
+                },100);
+            }else{
+                //Es hat sich was geändert
+                //Setzen des Cookies
+                setCookie("last_page",url,1);
+                //Laden der Seite
+                load_site(url);
+            }    
+        }else if(url == "home"){
+            //Wenn Cookie noch nicht gesetzt ist und URL=home ist versuchen home
+            //Seite zu laden(home kann dann auch login Seite sein)
+            setCookie("last_page","home",1);
+            //Versuchen home zu laden
+            load_site("home");    
+        }else{
+            //Anderen URL setzen und dymo erneut aufrufen damit
+            //andere Seite geladen wird
+            setCookie("last_page","unset_123",1);
+            dymo();
+        }
+    }else{
+        return false;
+    }
+}
 window.onload = function(){
     if(side_on){
         cookie_disclamer();
         document.body.addEventListener("keypress", function(e){var key = e.which; check_event(key)});
         show_msg("Lade...","<div id='loader'></div>",false);
-        check_login();
         f_close_msg();
+        check_login();
         //Starten der Style - Modifizierung
         call_update_style();
+        dymo();
     }else{
         show_msg("Fehler","Momentan ist unsere Seite nicht verf&uuml;gbar",false);
     }
@@ -174,7 +242,11 @@ function show_msg(string1,string2,dismiss){
     }else{
         //WAIT TILL PREV MSG IS CLOSED
         setTimeout(function(){
-            show_msg(string1,string2,dismiss);
+            if(getCookie("close_all") == ""){
+                show_msg(string1,string2,dismiss);
+            }else{
+                return false;
+            }
         },500);
     }
 }
@@ -193,17 +265,17 @@ function close_msg(){
     }
 }
 function f_close_msg(){
+    setCookie("close_all","true",1);
     _("msg_btn").disabled = false;
     setCookie("mouse_over_close","true",1);
     close_msg();
     setCookie("mouse_over_close","",-1);
-}
-function goto_side(side){
-    document.location = '#!/'+side;
+    setCookie("close_all","",-1);
 }
 function check_event(key){
     if(key == 13){
         //Enter Taste
+        //[HIER HINZUFÜGEN DAS LOGIN GESTARTET WIRD]
     }
 }
 //Passwort vergessen
