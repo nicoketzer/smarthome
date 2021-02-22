@@ -100,7 +100,7 @@ function load_site(site){
             //Ausgabe
             show_msg(title,text,can_close);
         }        
-    },"JSON").fail(function(a,b,c){
+    },"text").fail(function(a,b,c){
         console.log(a);
         console.log(b);
         console.log(c);
