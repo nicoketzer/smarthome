@@ -55,10 +55,13 @@ function exists_id(id){
 function set_text(id,text){
     _(id).innerHTML = text;
 }
+function accept_cookie(){
+    f_close_msg();
+    setCookie("cookie_accept","true",100);    
+}
 function cookie_disclamer(){
     if(getCookie("cookie_accept") == ""){
-        show_msg("Info","Unsere Seiten verwendet Cookies. <br /> Mit dem Benutzen unserer Seite akzeptierst du das. <button id='user_liz_btn' onclick='f_close_msg()'>OK</button>",false);
-        setCookie("cookie_accept","true",100);    
+        show_msg("Info","Unsere Seiten verwendet Cookies. <br /> Mit dem Benutzen unserer Seite akzeptierst du das. <button id='user_liz_btn' onclick='accept_cookie()'>OK</button>",false);    
     }else{
         setCookie("cookie_accept",getCookie("cookie_accept"),100);
     }
@@ -66,7 +69,7 @@ function cookie_disclamer(){
 function check_login(){
     if(getCookie("token") != ""){
         var token = getCookie("token");
-        $.post("/index.php","login=true&token="+token,function(res){
+        $.post("/work.php","login=true&token="+token,function(res){
             if(res == "ok"){
                 goto_side("home");
             }else{
@@ -148,16 +151,34 @@ function dymo(){
         return false;
     }
 }
+function start_site(){
+    document.body.addEventListener("keypress", function(e){var key = e.which; check_event(key)});
+    show_msg("Lade...","<div id='loader'></div>",false);
+    f_close_msg();
+    check_login();
+    //Starten der Style - Modifizierung
+    call_update_style();
+    dymo();    
+}
+function start_cookie_wait(){
+    if(getCookie("cookie_accept") == "true"){
+        start_site();
+    }else{
+        setTimeout(function(){
+            start_cookie_wait();
+        },100);
+    }    
+}
 window.onload = function(){
     if(side_on){
         cookie_disclamer();
-        document.body.addEventListener("keypress", function(e){var key = e.which; check_event(key)});
-        show_msg("Lade...","<div id='loader'></div>",false);
-        f_close_msg();
-        check_login();
-        //Starten der Style - Modifizierung
-        call_update_style();
-        dymo();
+        if(getCookie("cookie_accept") == "true"){
+            start_site();    
+        }else{
+            setTimeout(function(){
+                start_cookie_wait();
+            },100);    
+        }
     }else{
         show_msg("Fehler","Momentan ist unsere Seite nicht verf&uuml;gbar",false);
     }
@@ -174,7 +195,7 @@ function start_login(){
     //Login-Nachricht einblenden
     show_msg("Info","Du wirst eingeloggt...",false);
     //Abfrage starten
-    $.post("/index.php","login=true&bn="+bn+"&pw="+pw,function(res){
+    $.post("/work.php","login=true&bn="+bn+"&pw="+pw,function(res){
         if(res != "false"){
             f_close_msg();
             setCookie("token",res,1);
