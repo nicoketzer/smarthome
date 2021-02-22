@@ -1,4 +1,7 @@
 <?php
+//Alle Funktionen einbinden
+include("./res/all.php");
+
 //Diese Cronjob.php liegt auf dem Webserver
 //Sie muss jede Minute aufgerufen werden.
 //Sie ist Zuständig für die Verteilung der Cronjobs an die einzelnen C&C-Server
