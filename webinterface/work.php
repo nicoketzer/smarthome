@@ -7,7 +7,29 @@
  * Seiten-Part
  */
 if(isset($_POST["site"])){
-    //Hier wird z.B. das Laden von Seiten stattfinden    
+    //Hier wird z.B. das Laden von Seiten stattfinden 
+    $site = $_POST["site"];
+    if(exist_site($site)){
+        if(is_login_site($site)){
+            $erg = test_token($_COOKIE["token"];
+            if($erg){
+                $to_json = array("suc"=>"true","html"=>load_login_site($site,$erg));
+                $return = json_encode($to_json);    
+            }else{
+                //Nicht eingelogt
+                //Login-Seite wird geladen
+                $to_json = array("html"=>load_site("login"),"suc"=>"true");
+                $return = json_encode($to_json);
+            }    
+        }else{
+            $to_json = array("html"=>load_site($site),"suc"=>"true");
+            $return = json_encode($to_json);
+        }    
+    }else{
+        $to_json = array("suc"=>"false","title"=>"Fehler","text"=>"Die von dir gesuchte Seite existiert leider nicht","can_close"=>"true");
+        $return = json_encode($to_json);
+    }
+    echo $return;   
 }
 /*
  * LOGIN - PART
