@@ -1,4 +1,6 @@
 <?php 
+//Einbinden aller Funktionen
+include("res/all.php");
 //Hier werden alle Tasks ausgeführt.
 //Das Script wird am schluss beendet, also kein Output wenn keine Anfrage getroffen wurde.
 //Sollte es Output geben wird dieser über Return-Werte zurückgegeben. 
