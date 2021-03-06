@@ -68,7 +68,7 @@ class cronjob{
     }
     private function get_token_type($token){
         $mysqli = new_mysqli();
-        $sql = "";
+        $sql = "SELECT * FROM `token_action` WHERE `token`='" . $token . "'";
         $res = sql_result_to_array(start_sql($mysqli,$sql));
         close_mysqli($mysqli);
         if(isset($res[0])){
@@ -76,7 +76,7 @@ class cronjob{
         }else{
             //Es könnte eine weitere Rutine sein
             $mysqli = new_mysqli();
-            $sql = "";
+            $sql = "SELECT * FROM `rutine_token` WHERE `rut_token`='" . $token . "'";
             $res = sql_result_to_array(start_sql($mysqli,$sql));
             close_mysqli($mysqli);
             if(isset($res[0])){
@@ -90,7 +90,7 @@ class cronjob{
     private function get_rut_comms($rut_token){
         //Für Rutine Komandos bekommen
         $mysqli = new_mysqli();
-        $sql = "";
+        $sql = "SELECT * FROM `rutine_token` WHERE `rut_token`='" . $rut_token . "'";
         $res = sql_result_to_array(start_sql($mysqli,$sql));
         close_mysqli($mysqli);
         //Extrahieren des Aktions-Tokens und der ID
