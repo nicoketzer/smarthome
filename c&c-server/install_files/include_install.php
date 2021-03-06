@@ -74,7 +74,6 @@ function get_bind_token(){
 function remote_read($url){
     
 }
-<<<<<<< Updated upstream
 function generate_non_existing_dirs($local_file){
     
 }
@@ -91,7 +90,6 @@ function download(){
     foreach($file_list as $file){
         download_now($file);
     }
-=======
 function new_install(){
     //Hier überprüfung einbauen ob schon eine Installation vorhanden ist
     if(is_file("./LICENSE") || is_dir("./res") || is_file("./index.php") || is_file("./work.php")){
@@ -127,7 +125,6 @@ function do_install(){
         echo "install.php kann hier nicht mehr ausgef&uuml;hrt werden";
         unlink("install.php");
     }   
->>>>>>> Stashed changes
 }
 function self_test($url){
     $options = array();
