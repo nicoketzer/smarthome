@@ -66,9 +66,44 @@ class cronjob{
         $ident = $res[0]["token"];
         return $ident;
     }
+    private function get_token_type($token){
+        $mysqli = new_mysqli();
+        $sql = "";
+        $res = sql_result_to_array(start_sql($mysqli,$sql));
+        close_mysqli($mysqli);
+        if(isset($res[0])){
+            return $res[0]['action_type'];    
+        }else{
+            //Es könnte eine weitere Rutine sein
+            $mysqli = new_mysqli();
+            $sql = "";
+            $res = sql_result_to_array(start_sql($mysqli,$sql));
+            close_mysqli($mysqli);
+            if(isset($res[0])){
+                //Es ist eine weitere Rutine
+                return "rutine";
+            }else{
+                return "unknown";
+            }
+        }    
+    }
     private function get_rut_comms($rut_token){
         //Für Rutine Komandos bekommen
-        
+        $mysqli = new_mysqli();
+        $sql = "";
+        $res = sql_result_to_array(start_sql($mysqli,$sql));
+        close_mysqli($mysqli);
+        //Extrahieren des Aktions-Tokens und der ID
+        $rut_tokens = array();
+        foreach($res as $findout){
+            $token = $findout["action_token"];
+            $order_nr = $findout["order_nr"];
+            $type = $this->get_token_type($token);
+            //In array hinzufügen (sortiert)
+            $rut_tokens[intval($order_nr)] = array("command"=>$token,"type"=>$type);
+        }
+        //Rückgabe
+        return $rut_tokens;
     }
     private function send_command($server,$comm,$ident,$type){
         if($type != "rutine"){
