@@ -31,6 +31,12 @@ server = server-ip/ddns-adresse
 type = definiert um welche art von token es sich handelt
 token = enthält den eig. token
 
+-cronjob-TBL:
+Hier werden Cronjobs gespeichert. Es wird der C&C-Server hinterlegt (wenn es ein CJ für alle CC-Server ist wird "*" verwendet) dann der
+Code der gemacht werden soll und der typ (not_imp oder imp). Bei not_imp wird ein Token als Code hinterlegt. Die Aktion wiederum wird dann 
+mit diesem Token aus der token_action-TBL gelesen. Bei einem "imp" CJ wird ein Token für einen Ablauf hinterlegt. Dieser Ablauf wiederum liegt dann
+in der (auch lokalen) token_abl-TBL und führt dann alle Tokens aus.
+
 -router-dev-TBL:
 Hier werden alle Geräte aus dem Router gespeichert und der aktuelle Status (online/offline) gespeichert.
 Aufgaben die Verbunden sind mit den Status eines Geräts können angelegt werden. Die Erstellungszeit/Update-Zeit wird gespeichert.
