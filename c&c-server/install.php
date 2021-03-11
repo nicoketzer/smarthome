@@ -18,9 +18,11 @@
     $dep_file = "all_func.tmp.php";
     if(!file_exists($dep_file)){
         $process = curl_init("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
-        curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain'));
+        curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
         curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+        //Damit immer die neuste Version von GitHub gezogen wird
+        curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
         $response_body = curl_exec($process);
         $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
         if($http_code >= 300) {
@@ -28,7 +30,7 @@
         }
         curl_close($process);
         
-        $handle = fopen($dep_file,$modus);
+        $handle = fopen($dep_file,"w");
         fwrite($handle,$response_body);
         fclose($handle);
     }
