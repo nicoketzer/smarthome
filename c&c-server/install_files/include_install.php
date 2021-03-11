@@ -1,7 +1,7 @@
 <?php
 //Variablen
 $bind_token_file = "[HIER_ABSOLUTEN_PFAD+VERZEICHNIS+DATEINAMEN einf&uuml;gen]";
-//Funktionen 
+//Funktionen
 if(!function_exists("read_file")){
 function read_file($file){
     if(file_exists($file)){
@@ -12,7 +12,7 @@ function read_file($file){
             $back = fread($handle,$fs);
             fclose($handle);
             //Ausgelesene Datei zurückgeben
-            return $back;    
+            return $back;
         }else{
             //Dateigröße = 0 sprich leer
             //Leeren String zurückgeben
@@ -39,7 +39,7 @@ function generate_token(){
     $char = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0");
     $token = "";
     for($i=0; $i<32; $i++){
-        $token .= $char[array_rand($char)];    
+        $token .= $char[array_rand($char)];
     }
     return $token;
 }
@@ -59,7 +59,7 @@ function get_bind_token(){
         //um das rauszufinden muss sie geöffnet und ausgelesen werden
         if(read_file($bind_token_file) == "0000"){
             write_file($bind_token_file,$bind_token,"w");
-            return true;    
+            return true;
         }else{
             //Es existiert schon ein Bind-Token
             return false;
@@ -72,24 +72,25 @@ function get_bind_token(){
 
 //First-Download funktionen
 function remote_read($url){
-    
+
 }
 function generate_non_existing_dirs($local_file){
-    
+
 }
 function get_file_list(){
-    //HIER VON GITHUB DATEI ÖFFNEN DIE DATEISTAMM ENTHÄLT (AM BESTEN JSON-DATEI)    
+    //HIER VON GITHUB DATEI ÖFFNEN DIE DATEISTAMM ENTHÄLT (AM BESTEN JSON-DATEI)
 }
 function download_now($datei){
     $inh = remote_read($datei["remote"]);
     generate_non_existing_dirs($datei["local"]);
-    write_file($datei['local'],$inh,"w");    
+    write_file($datei['local'],$inh,"w");
 }
 function download(){
     $file_list = get_file_list();
     foreach($file_list as $file){
         download_now($file);
     }
+}
 function new_install(){
     //Hier überprüfung einbauen ob schon eine Installation vorhanden ist
     if(is_file("./LICENSE") || is_dir("./res") || is_file("./index.php") || is_file("./work.php")){
@@ -112,19 +113,19 @@ function do_install(){
             #Anschließend neuen Bind-Token erstellen
             if(get_bind_token()){
                 //Bind Token Fertig
-                set_stage(1);   
+                set_stage(1);
             }else{
                 //Es konnte kein neuer Bind-Token erzeugt werden
                 echo "Die installation kann keinen neuen Bind-Token erzeugen. Fehlschlag!";
-            }            
+            }
         }else{
             //Download oder Entpacken fehlgeschlagen
-            echo "Die installation konnte nicht gestartet werden da der Download fehlschlug";    
-        } 
+            echo "Die installation konnte nicht gestartet werden da der Download fehlschlug";
+        }
     }else{
         echo "install.php kann hier nicht mehr ausgef&uuml;hrt werden";
         unlink("install.php");
-    }   
+    }
 }
 function self_test($url){
     $options = array();
@@ -134,14 +135,14 @@ function self_test($url){
         //Ist erreichbar
         set_stage("5");
     }else{
-        echo "Die IP-Adresse und der Port f&uuml;hren nicht zu diesen Server. Bitte Versuche es erneut".
+        echo "Die IP-Adresse und der Port f&uuml;hren nicht zu diesen Server. Bitte Versuche es erneut";
         echo "Mit dem anh&auml;ngen von ?skip_stage=true an den URL &uuml;berspringst du diesen Test";
-    }    
+    }
 }
 function finish_install(){
     //Alle Installationsdatein löschen
     unlink("install.php");
     unlink("self_test_url");
-    
+
 }
 ?>
