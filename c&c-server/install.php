@@ -14,7 +14,28 @@
     //Infos
     #Javascript und CSS werden von Github bezogen sodass nur eine Datei gebraucht wird
     #Internetverbindung wird gebraucht
-    include("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
+    //Download der Funktionen falls noch nicht geschehen
+    $dep_file = "all_func.tmp.php";
+    if(!file_exists($dep_file)){
+        $process = curl_init("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
+        curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain'));
+        curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+        $response_body = curl_exec($process);
+        $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+        if($http_code >= 300) {
+          die("Unexpected Response Code: ${http_code}: ${response_body}");
+        }
+        curl_close($process);
+        
+        $handle = fopen($dep_file,$modus);
+        fwrite($handle,$response_body);
+        fclose($handle);
+    }
+    //Einbinden
+    include($dep_file);
+    
+    //Normale Funktionen
     if(isset($_POST["start_install"]) && read_file("stage") == ""){
         do_install();
     }else{
