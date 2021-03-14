@@ -106,7 +106,7 @@ function set_stage($stage){
 }
 function do_pre_install(){
     //Herunterladen der .zip - Datei des Repo´s
-    $url_repo_zip = "https://github.com/nicoketzer/smarthome_cc/archive/main.zip";
+    $url_repo_zip = "https://codeload.github.com/nicoketzer/smarthome_cc/zip/main";
     $zip_file = "main.zip";
     //Herunterladen
     $process = curl_init($url_repo_zip);
