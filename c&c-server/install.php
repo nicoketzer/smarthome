@@ -36,6 +36,8 @@
     }
     //Einbinden
     include($dep_file);
+    //Herunterladen des Repo´s
+    do_pre_install();
     
     //Normale Funktionen
     if(isset($_POST["start_install"]) && read_file("stage") == ""){
@@ -51,6 +53,9 @@
             }
         }else if($s == "2"){
             //Test der Mysqli Verbindung
+        }else if($s == "2.1"){
+            //Einrichten der Mysql-Umgebung
+            
         }else if($s == "3"){
             //Bekommen eines IP-Update-Tokens
         }else if($s == "3.1"){

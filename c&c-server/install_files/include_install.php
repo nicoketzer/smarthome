@@ -104,6 +104,39 @@ function new_install(){
 function set_stage($stage){
     write_file("stage",$stage,"w");
 }
+function do_pre_install(){
+    //Herunterladen der .zip - Datei des Repo´s
+    $url_repo_zip = "https://github.com/nicoketzer/smarthome_cc/archive/main.zip";
+    $zip_file = "main.zip";
+    //Herunterladen
+    $process = curl_init($url_repo_zip);
+    curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: application/zip',"Cache-Control: no-cache"));
+    curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+    //Damit immer die neuste Version von GitHub gezogen wird
+    curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
+    $response_body = curl_exec($process);
+    $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+    if($http_code >= 300) {
+      die("Unexpected Response Code: ${http_code}: ${response_body}");
+    }
+    curl_close($process);
+    //Speichern des heruntergeladenen
+    $handle = fopen($zip_file,"w");
+    fwrite($handle,$response_body);
+    fclose($handle);
+    //Entpacken der .zip
+    $zip = new ZipArchive;
+    $res = $zip->open($zip_file);
+    if ($res === TRUE) {
+      $zip->extractTo('./');
+      $zip->close();
+    } else {
+      die ("Unziping Failed!");
+    }
+    //Löschen der .zip
+    unlink($zip_file);
+}
 //Main-Funktion
 function do_install(){
     //Als erstes alles Downloaden und entpacken lassen
