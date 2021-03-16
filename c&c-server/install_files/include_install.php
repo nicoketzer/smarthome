@@ -174,7 +174,7 @@ function do_pre_install(){
     #Datei selbst ändert
     $tmp_arr = explode("/",$url_repo_zip);
     $branch = $tmp_arr[count($tmp_arr)-1];
-    $folder_name = $tmp_arr[count($tmp_arr)-3];
+    $respo_name = $tmp_arr[count($tmp_arr)-3];
     $folder_name = $respo_name . "-" . $branch;
     if(!is_dir($folder_name)){
         //Nicht geglückt das ZIP-Verzeichnis zu finden
