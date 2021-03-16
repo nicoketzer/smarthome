@@ -68,7 +68,7 @@ function get_bind_token(){
 }
 }
 //Move
-// Function to remove folders and files 
+// Function to remove folders and files
 function rrmdir($dir){
     if(is_dir($dir)){
         $files = scandir($dir);
@@ -82,62 +82,89 @@ function rrmdir($dir){
         unlink($dir);
     }
 }
-
-// Function to Copy folders and files       
+function generate_dep_dirs($source_dir,$at){
+    $tmp = explode("/",$source_dir);
+    if($at <= (count($tmp)-1)){
+        $dir_for_lookup = "";
+        for($i = 0; $i <= $at; $i++){
+            $dir_for_lookup = $tmp[$i] . "/";
+        }
+        if(!is_dir($dir_for_lookup)){
+            mkdir($dir_for_lookup);
+        }
+        $at_new = $at+1;
+        generate_dep_dirs($source_dir,$at_new);
+    }else{
+        return true;
+    }
+}
+function test_all_dep_dirs($find_dirs){
+    $tmp = explode("/",$find_dirs);
+    //$i=1 weil es sich bei dem ersten Element in dem array um das source dir an sich handelt
+    //count($tmp)-1 da count bei 1 und nicht bei 0 das zählen anfängt
+    $search_dirs = "";
+    for($i=1; $i<count($tmp)-1;$i++){
+        $search_dirs .= $tmp[$i] . "/";
+    }
+    generate_dep_dirs($search_dirs,0);
+    $data_array = array($search_dirs,$tmp[count($tmp)-1]);
+    return $data_array;
+}
+function copy_file_to_dest($source_file, $ziel_dir){
+    //Daten bekommen und gebrauchte Verzeichnisse erstellen lassen
+    $data = test_all_dep_dirs($source_file);
+    //Daten auslesen
+    $dep_dir = $data[0];
+    $name = $data[1];
+    $dest_file = $ziel_dir . "/" . $dep_dir . "/" . $name;
+    //Kopieren
+    copy($source_file,$dest_file);
+}
+function can_del_dir($source_file){
+    //Herausbekommen des Verzeichnisses
+    $tmp = explode("/",$source_file);
+    $source_dir = "";
+    for($i = 0; $i<count($tmp)-1; $i++){
+        $source_dir .= $tmp[$i] . "/";
+    }
+    //Scannen des Verzeichnisses
+    $scan = scandir($source_dir);
+    if(count($scan) <= 2){
+        //Es gibt nur noch die Elemente . und .. somit kann das Verzeichniss gelöscht werden
+        rmdir($source_dir);
+    }
+}
+// Function to Copy folders and files
 function copy_all_files($source_dir, $ziel_dir){
     echo "Source:<br />";
     print_r($source_dir);
     echo "<br />Ziel:<br />";
     print_r($ziel_dir);
-    if(file_exists($ziel_dir)){
-        //Existiert schon
-        rrmdir($ziel_dir);
-    }    
+
+    //Neue Funktion
     if(is_dir($source_dir)){
-        mkdir($dst);
-        $files = scandir($src);
-        foreach($files as $file){
-            if ($file != "." && $file != ".."){
-                copy_all_files("$src/$file", "$dst/$file");
+        $scan = scandir($source_dir);
+        foreach($scan as $scan_erg){
+            if($scan_erg != "." && $scan_erg != ".."){
+                //Es handelt sich um normale Datei
+                #Abfrage ob es sich um das source-dir handelt da sich das im normalfall
+                #im Ziel-Dir befindet
+                if($ziel_dir . "/" . $scan_erg != $source_dir){
+                    copy_all_files($source_dir . "/" . $scan_erg, $ziel_dir);
+                }
             }
         }
-    }else if(file_exists($source_dir)){
-        copy($src, $dst);
-    }   
-}
-
-
-//First-Download funktionen
-function remote_read($url){
-
-}
-function generate_non_existing_dirs($local_file){
-
-}
-function get_file_list(){
-    //HIER VON GITHUB DATEI ÖFFNEN DIE DATEISTAMM ENTHÄLT (AM BESTEN JSON-DATEI)
-}
-function download_now($datei){
-    $inh = remote_read($datei["remote"]);
-    generate_non_existing_dirs($datei["local"]);
-    write_file($datei['local'],$inh,"w");
-}
-function download(){
-    $file_list = get_file_list();
-    foreach($file_list as $file){
-        download_now($file);
-    }
-}
-function new_install(){
-    //Hier überprüfung einbauen ob schon eine Installation vorhanden ist
-    if(is_file("./LICENSE") || is_dir("./res") || is_file("./index.php") || is_file("./work.php")){
-        //Wenn eine dieser Datein/Ordner existiert ist es keine neue installation mehr
-        return false;
     }else{
-        //Nichts vorhanden --> Neue installation
-        return true;
+        //Es handelt sich um eine Datei
+        copy_file_to_dest($source_dir,$ziel_dir);
+        //Anschließend in Sourcedir löschen
+        unlink($source_dir);
+        //Überprüfen ob Verzeichniss auch gelöscht werden kann
+        can_del_dir($source_dir);
     }
 }
+
+
 function set_stage($stage){
     write_file("stage",$stage,"w");
 }
@@ -174,7 +201,7 @@ function do_pre_install(){
     //Entpackete Dateien Verschieben
     #Liegen momentan in "smarthome_cc-main" - Ordner
     #Um später kompatibel zu sein mit anderen Branch´s wird das letzte Teil
-    #des URL´s als Zusatz "-[ENDE_URL]" Verwendet da sich der URL immer mit der Zip 
+    #des URL´s als Zusatz "-[ENDE_URL]" Verwendet da sich der URL immer mit der Zip
     #Datei selbst ändert
     $tmp_arr = explode("/",$url_repo_zip);
     $branch = $tmp_arr[count($tmp_arr)-1];
