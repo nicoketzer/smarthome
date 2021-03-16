@@ -85,6 +85,10 @@ function rrmdir($dir){
 
 // Function to Copy folders and files       
 function copy_all_files($source_dir, $ziel_dir){
+    echo "Source:<br />";
+    print_r($source_dir);
+    echo "<br />Ziel:<br />";
+    print_r($ziel_dir);
     if(file_exists($ziel_dir)){
         //Existiert schon
         rrmdir($ziel_dir);
@@ -97,7 +101,7 @@ function copy_all_files($source_dir, $ziel_dir){
                 copy_all_files("$src/$file", "$dst/$file");
             }
         }
-    }else if(file_exists($src)){
+    }else if(file_exists($source_dir)){
         copy($src, $dst);
     }   
 }
