@@ -67,7 +67,40 @@ function get_bind_token(){
     }
 }
 }
+//Move
+// Function to remove folders and files 
+function rrmdir($dir){
+    if(is_dir($dir)){
+        $files = scandir($dir);
+        foreach ($files as $file){
+            if($file != "." && $file != ".."){
+                rrmdir("$dir/$file");
+            }
+        }
+        rmdir($dir);
+    }else if(file_exists($dir)){
+        unlink($dir);
+    }
+}
 
+// Function to Copy folders and files       
+function copy_all_files($source_dir, $ziel_dir){
+    if(file_exists($ziel_dir)){
+        //Existiert schon
+        rrmdir($ziel_dir);
+    }    
+    if(is_dir($source_dir)){
+        mkdir($dst);
+        $files = scandir($src);
+        foreach($files as $file){
+            if ($file != "." && $file != ".."){
+                copy_all_files("$src/$file", "$dst/$file");
+            }
+        }
+    }else if(file_exists($src)){
+        copy($src, $dst);
+    }   
+}
 
 
 //First-Download funktionen
@@ -134,6 +167,20 @@ function do_pre_install(){
     } else {
       die ("Unziping Failed!");
     }
+    //Entpackete Dateien Verschieben
+    #Liegen momentan in "smarthome_cc-main" - Ordner
+    #Um später kompatibel zu sein mit anderen Branch´s wird das letzte Teil
+    #des URL´s als Zusatz "-[ENDE_URL]" Verwendet da sich der URL immer mit der Zip 
+    #Datei selbst ändert
+    $tmp_arr = explode("/",$url_repo_zip);
+    $branch = $tmp_arr[count($tmp_arr)-1];
+    $folder_name = $tmp_arr[count($tmp_arr)-3];
+    $folder_name = $respo_name . "-" . $branch;
+    if(!is_dir($folder_name)){
+        //Nicht geglückt das ZIP-Verzeichnis zu finden
+        die("Entzipte Ordnerstruktur wurde nicht gefunden. Name: ". $folder_name . " Error: Not Found");
+    }
+    copy_all_files($folder_name, ".");
     //Löschen der .zip
     unlink($zip_file);
 }
