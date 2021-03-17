@@ -87,9 +87,11 @@ function generate_dep_dirs($source_dir,$at){
     if($at <= (count($tmp)-1)){
         $dir_for_lookup = "";
         for($i = 0; $i <= $at; $i++){
-            $dir_for_lookup = $tmp[$i] . "/";
+            if($tmp[$i] != ""){
+                $dir_for_lookup .= $tmp[$i] . "/";
+            }
         }
-        if(!is_dir($dir_for_lookup)){
+        if(!is_dir($dir_for_lookup) && $dir_for_lookup != ""){
             mkdir($dir_for_lookup);
         }
         $at_new = $at+1;
@@ -136,11 +138,6 @@ function can_del_dir($source_file){
 }
 // Function to Copy folders and files
 function copy_all_files($source_dir, $ziel_dir){
-    echo "Source:<br />";
-    print_r($source_dir);
-    echo "<br />Ziel:<br />";
-    print_r($ziel_dir);
-
     //Neue Funktion
     if(is_dir($source_dir)){
         $scan = scandir($source_dir);
