@@ -129,11 +129,19 @@ function can_del_dir($source_file){
     for($i = 0; $i<count($tmp)-1; $i++){
         $source_dir .= $tmp[$i] . "/";
     }
+    $parent_dir = "";
+    for($i = 0; $i<count($tmp)-2; $i++){
+        $parent_dir .= $tmp[$i] . "/";
+    }
     //Scannen des Verzeichnisses
     $scan = scandir($source_dir);
     if(count($scan) <= 2){
         //Es gibt nur noch die Elemente . und .. somit kann das Verzeichniss gelöscht werden
         rmdir($source_dir);
+        //Schauen ob dann Parent-Dir auch löschbar ist
+        if(is_dir($parent_dir) && $parent_dir != ""){
+            can_del_dir($parent_dir);
+        }
     }
 }
 // Function to Copy folders and files
