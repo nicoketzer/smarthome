@@ -1,0 +1,20 @@
+Was soll hier entstehen?
+-->Ein Skript bzw. Service+Script für Linux Geräte die sich selber abschalten können/sollen
+
+Wie soll der Aufbau sein?
+Ein Service oder Cronjob (noch nicht sicher) der Permanent ein Skript aufruft.
+Dieses Skript wiederum holt sich vom definierten C&C-Server den für das Gerät hinterlegten 
+Status. 
+Status 0: Herunterfahren des Systems und warten auf WOL-Packet (falls Gerät unterstützt)
+Status 1: Alle Services werden gestopt --> Energiesparren
+Status 2: Services wie Mysql-Server, Apache2, ... werden gestopt
+Status 3: Alles OK --> falls von Status 1 oder 2 komment wieder alle Services aktivieren
+
+Der Status kann z.B. Tageszeitabhängig im C&C-Server hinterlegt werden oder z.B. ob Stromausfall ist 
+oder nicht etc. etc.
+
+Momentaner Stand:
+C&C-Server Unterstützung zur Abfrage des Status aus der DB: nein
+Geräte-Skript: nein
+Geräte-Service/Geräte-Cronjob: nein
+Alles fertig Abgeschlossen: nein
