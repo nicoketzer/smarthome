@@ -38,6 +38,57 @@
     include($dep_file);
     //Herunterladen des Repo´s
     do_pre_install();
+    //Zur Verfügung stellen der CSS und JS Dateien
+    if(isset($_GET["include_file"]) && isset($_GET["file_name"])){
+        if($_GET['include_file'] == "css"){
+            //Setzen des Content-Type Headers
+            header("Content-Type: text/css");
+            if($_GET['file_name'] == "style.css"){
+                $url = "https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/style.css";
+                $process = curl_init($url);
+                curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
+                curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+                //Damit immer die neuste Version von GitHub gezogen wird
+                curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
+                $response_body = curl_exec($process);
+                $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+                if($http_code >= 300) {
+                  die("Unexpected Response Code: ${http_code}: ${response_body}");
+                }
+                curl_close($process);
+                echo $response_body;
+                exit;    
+            }else{
+                die("Unknown File-Name");
+            }
+        }else if($_GET['include_file'] == "js"){
+            //Setzen des Content-Type Headers
+            header("Content-Type: text/javascript");
+            if($_GET['file_name'] == "main.js"){
+                $url = "https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/main.js";
+                $process = curl_init($url);
+                curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
+                curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+                //Damit immer die neuste Version von GitHub gezogen wird
+                curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
+                $response_body = curl_exec($process);
+                $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+                if($http_code >= 300) {
+                  die("Unexpected Response Code: ${http_code}: ${response_body}");
+                }
+                curl_close($process);
+                echo $response_body;
+                exit;
+            }else{
+                die("Unknown File-Name");
+            }
+        }else{
+            //Kein Bekannter Include-Datei-Typ
+            die("Unexpected include_file");
+        }
+    }
     
     //Normale Funktionen
     if(isset($_POST["start_install"]) && read_file("stage") == ""){
@@ -75,8 +126,8 @@
 <html>
     <head>
         <title>Installer</title>
-        <script src="https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/main.js"></script>
-        <link href="https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/style.css" type="text/css" rel="stylesheet" />
+        <script src="install.php?include_file=js&file_name=main.js"></script>
+        <link href="install.php?include_file=css&file_name=style.css" type="text/css" rel="stylesheet" />
     </head>
     <body>
         <h1>Installation Command &amp; Controll - Server</h1>
