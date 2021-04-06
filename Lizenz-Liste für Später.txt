@@ -3,6 +3,9 @@ Eigene Sachen Lizenz: MIT License
 PHPMailer:
 Bilder: Unsplash.com Lizenz: https://unsplash.com/license
 
+Verwendete Bilder:
+https://unsplash.com/photos/EJe6LqEjHpA (Hintergrund Installer)
+
 C&C-Server:
 Eigene Sachen Lizenz: MIT License
 Betriebssystem (RaspberryPI-OS): https://www.raspberrypi.org
