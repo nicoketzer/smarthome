@@ -38,6 +38,48 @@
     include($dep_file);
     //Herunterladen des Repo´s
     do_pre_install();
+    
+    function valid_json($json) {
+        json_decode($json);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+    //JSON Anfragenimplementierung
+    if(isset($_GET["json"])){
+        //Überprüfen ob JSON String valides JSON ist
+        if(valid_json($_GET['json'])){
+            //JSON zu Array umwandeln
+            $para_array = json_decode($_GET['json'],true);
+            //Schauen ob der Topic-Parameter übergeben wurde
+            if(isset($para_array["topic"])){
+                if($topic == "gh_file"){
+                    //Hier muss ein File-Name gepassed werden
+                    if(isset($para_array["file_name"])){
+                        
+                    }else{
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no File-Name", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }    
+                }else if($topic == "install"){
+                    /*
+                     * 
+                     * 
+                     * Hier dann die anderen Dateien einfügen die Über GH bezogen werden damit sie nicht heruntergeladen werden müssen 
+                     * 
+                     * 
+                     */    
+                }else{
+                    $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no valid Topic", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                }
+            }else{
+                $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no Topic", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));    
+            }
+        }else{
+            $tmp_array = array("content"=>array("main"=>"You passed a none valid JSON-String", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));    
+        }
+        $json = json_encode($tmp_array);
+        echo $json;
+    }
+    //ENDE JSON IMPLEMEETIERUNG
+    
     //Zur Verfügung stellen der CSS und JS Dateien
     if(isset($_GET["include_file"]) && isset($_GET["file_name"])){
         if($_GET['include_file'] == "css"){
@@ -105,7 +147,7 @@
                 }
                 curl_close($process);
                 //Bekommene HTML in JSON umwandeln
-                $tmp_array = array("content"=>array("main"=>$response_body, "title"=>"", "ref"=>""), "debug"=>array("response_code"=>$http_code, "get_url"=>$url, "request_file"=>$_GET['file_name']));
+                $tmp_array = array("content"=>array("main"=>$response_body, "title"=>"", "ref"=>"", "error" => "none"), "debug"=>array("response_code"=>$http_code, "get_url"=>$url, "request_file"=>$_GET['file_name']));
                 $json = json_encode($tmp_array);
                 echo $json;
                 exit;    
