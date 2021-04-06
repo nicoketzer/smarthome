@@ -88,6 +88,30 @@
             }else{
                 die("Unknown File-Name");
             }
+        }else if($_GET['include_file'] == "html"){
+            header("Content-Type: text/html");
+            if($_GET['file_name'] == "fillout_form.html"){
+                $url = "https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/fillout_form.html";
+                $process = curl_init($url);
+                curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
+                curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+                curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+                //Damit immer die neuste Version von GitHub gezogen wird
+                curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
+                $response_body = curl_exec($process);
+                $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+                if($http_code >= 300) {
+                  die("Unexpected Response Code: ${http_code}: ${response_body}");
+                }
+                curl_close($process);
+                //Bekommene HTML in JSON umwandeln
+                $tmp_array = array("content"=>array("main"=>$response_body, "title"=>"", "ref"=>""), "debug"=>array("response_code"=>$http_code, "get_url"=>$url, "request_file"=>$_GET['file_name']));
+                $json = json_encode($tmp_array);
+                echo $json;
+                exit;    
+            }else{
+                die("Unkown File-Name");
+            }    
         }else{
             //Kein Bekannter Include-Datei-Typ
             die("Unexpected include_file");
