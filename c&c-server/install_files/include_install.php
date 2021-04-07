@@ -211,6 +211,26 @@ function do_pre_install(){
         set_stage("1");
     }
 }
+if(!function_exists("fetch_data")){
+function fetch_data($url){
+    $process = curl_init($url);
+    curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
+    curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
+    curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
+    //Damit immer die neuste Version von GitHub gezogen wird
+    curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
+    $response_body = curl_exec($process);
+    $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
+    $error = "";
+    if($http_code >= 300) {
+      $error = "FETCH_ERROR_".$http_code;
+    }
+    curl_close($process);
+    echo $response_body;
+    $ret_arr = array("main"=>$response_body,"title"=>"","ref"=>$url,"error"=>$error,"resp_code"=>$http_code);
+    return $ret_arr;
+}
+}
 //Main-Funktion
 function do_install(){
     //Als erstes alles Downloaden und entpacken lassen
