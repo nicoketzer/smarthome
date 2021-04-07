@@ -211,6 +211,12 @@ function do_pre_install(){
         set_stage("1");
     }
 }
+if(!function_exists("valid_json")){
+function valid_json($json) {
+    json_decode($json);
+    return (json_last_error() == JSON_ERROR_NONE);
+}
+}
 if(!function_exists("fetch_data")){
 function fetch_data($url){
     $process = curl_init($url);
