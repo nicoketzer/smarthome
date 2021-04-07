@@ -53,10 +53,23 @@
             if(isset($para_array["topic"])){
                 if($topic == "gh_file"){
                     //Hier muss ein File-Name gepassed werden
-                    if(isset($para_array["file_name"])){
-                        
+                    if(isset($para_array["url"])){
+                        $gh_url = $para_array['url']; 
+                        $content_type = ($para_array['content_type']!==null ? $para_array['content_type'] : 'text/plain');
+                        //Festlegen das der Zurückgegebene Inhalt diesen Content-Type hat
+                        header("Content-Type: " . $content_type);   
+                        //Fetchen des GH-URL´s
+                        $fetch_return = fetch_data($gh_url);
+                        //Aufbereitung der Daten
+                        $resp_m = $fetch_return["main"];
+                        $resp_t = $fetch_return["title"];
+                        $resp_r = $fetch_return["ref"];
+                        $resp_e = ($fetch_return["error"]=="" ? "NO_ERROR" : $fetch_return['error']);
+                        $resp_c = $fetch_return["resp_code"];
+                        //Ausgabe der bekommenen Daten und rückgabe
+                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, $error=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url));
                     }else{
-                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no File-Name", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }    
                 }else if($topic == "install"){
                     /*
@@ -76,7 +89,19 @@
             $tmp_array = array("content"=>array("main"=>"You passed a none valid JSON-String", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));    
         }
         $json = json_encode($tmp_array);
-        echo $json;
+        //Nochmal Unterscheiden ob nur Code ausgegeben werden soll oder das JSON
+        if($topic != "gh_file"){
+            echo $json;
+        }else{
+            if($tmp_array["error"] == "NO_ERROR"){
+                echo $tmp_array["main"];
+            }else{
+                //Bei der Anfrage gab es einen Fehler also wird das TMP-ARRAY
+                //MIT PRINT_R ausgegeben
+                print_r($tmp_array);
+            }
+        }
+        exit;
     }
     //ENDE JSON IMPLEMEETIERUNG
     
