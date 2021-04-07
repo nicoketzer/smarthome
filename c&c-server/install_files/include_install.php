@@ -211,6 +211,31 @@ function do_pre_install(){
         set_stage("1");
     }
 }
+if(!function_exists("constrain")){
+function constrain($val, $min, $max){
+    if($min < $max){
+        //Normaler Ablauf
+        if(floatval($val) >= floatval($max)){
+            //Value ist größer als das MAX-Value also wird das Max-Value zurückgegeben
+            return $max;
+        }else{
+            if(floatval($val) <= floatval($min)){
+                //Value ist kleiner als das MIN-Value also wird das Min-Value zurückgegebn
+                return $min;
+            }else{
+                //Wenn nichts zutrifft heißt das das das Value zw. MIN und MAX liegt also wird das eig. Value zurückgegeben
+                return $val;
+            }
+        }
+    }else if($min == $max){
+        //Wenn min und max gleich sind kann egal was kommt nur min bzw. max zurückgegeben werden
+        return $min;    
+    }else{
+        //Wenn max kleiner wie Min ist werden die Werte vertauscht und das Ergebnis davon zurückgegeben
+        return constrain($val, $max, $min);
+    }
+}
+}
 if(!function_exists("valid_json")){
 function valid_json($json) {
     json_decode($json);
