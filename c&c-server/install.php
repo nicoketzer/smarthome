@@ -46,6 +46,7 @@
             $para_array = json_decode($_GET['json'],true);
             //Schauen ob der Topic-Parameter übergeben wurde
             if(isset($para_array["topic"])){
+                $topic = $para_array['topic'];
                 if($topic == "gh_file"){
                     //Hier muss ein File-Name gepassed werden
                     if(isset($para_array["url"])){
@@ -74,6 +75,22 @@
                      * 
                      * 
                      */    
+                }else if($topic == "check"){
+                    $do_skip = ($para_array["skip"]!==null ? $para_array['skip'] : "SELF_CHECK");
+                    if($do_skip == "SELF_CHECK"){
+                        //Kein Skip-Schritt sondern ein normaler
+                        //Da es sich um einen Connect Test handelt muss einfach "ok" zurückgegeben werden
+                        //und dann das Skript beendet werden
+                        echo "ok";
+                        exit;
+                    }else{
+                        //Die aktuelle Stage wird geskipped
+                        $new_stage = constrain(intval(intval($para_array['skip'])+1), 1, 5);
+                        set_stage($new_stage);
+                        //Rückgabe das Befehl erfolgreich war
+                        echo "ok";
+                        exit;
+                    }        
                 }else{
                     $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no valid Topic", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                 }
