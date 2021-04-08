@@ -319,8 +319,27 @@ class install{
     public function __constructor(){
         return true;    
     }
-    public function stage_1(){
-
+    public function stage_1($stage_data){
+        #Zugangsdaten Remote Mysql-Server
+        $mysqli_server = $stage_data["mysqli_server"];
+        $mysqli_bn = $stage_data["mysqli_bn"];
+        $mysqli_pw = $stage_data["mysqli_pw"];
+        $mysqli_db = $stage_data["mysqli_db"];
+        #Zugangsdaten Lokaler Mysql-Server
+        $mysqli_offline_server = ($stage_data["mysqli_offline_server"] !== null ? $stage_data['mysqli_offline_server'] : "localhost");
+        $mysqli_offline_bn = $stage_data["mysqli_offline_bn"];
+        $mysqli_offline_pw = $stage_data["mysqli_offline_pw"];
+        $mysqli_offline_db = $stage_data["mysqli_offline_db"];
+        //Zusätzliche Daten generieren
+        $cc_bind_token = get_bind_token();
+        $cc_cronjob_ident = generate_token();
+        $cc_work_ident = generate_token();
+        $cc_ip_update_token = generate_token();
+        //Adressdaten einfügen
+        $cc_port_extern = $stage_data["cc_port"];
+        $cc_server_addr = ($stage_data["cc_addr"] !== null ? $stage_data['cc_addr'] : "localhost");
+        $cc_server_hostname = $stage_data["cc_host"];
+        $cc_server_name = ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)");
     }
     public function stage_2(){
 

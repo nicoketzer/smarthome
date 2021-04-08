@@ -1,16 +1,4 @@
 <?php
-    //Für Stage 4
-    if(isset($_GET["c"])){
-        if($_GET['c'] == "test"){
-            echo "ok";
-            exit;
-        }
-    }else if(isset($_GET["skip_stage"])){
-        if(read_file("stage") == "4"){
-            set_stage("5");
-            echo "Selbst-Test wurde &uuml;bersprungen";
-        }
-    }
     //Infos
     #Javascript und CSS werden von Github bezogen sodass nur eine Datei gebraucht wird
     #Internetverbindung wird gebraucht
@@ -68,13 +56,57 @@
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }    
                 }else if($topic == "install"){
-                    /*
-                     * 
-                     * 
-                     * Hier dann die anderen Dateien einfügen die Über GH bezogen werden damit sie nicht heruntergeladen werden müssen 
-                     * 
-                     * 
-                     */    
+                    //Install-Objekt holen
+                    $install = new install();
+                    //HIER EINTSCHEIDUNGEIN TREFFEN
+                    $stage = read_file("stage");
+                    if($stage == "1"){
+                        //Benutzerangben müssen gemacht werden
+                        if(isset($para_array["stage_data"]){
+                            //Daten auswerten
+                            $stage_data = $para_array['stage_data'];
+                            //Sollte bis jetzt 11 Elemente enthalten
+                            if(count($stage_data) == 8){
+                                //Überprüfen ob alle Gesetzt sind
+                                if(all_set($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_server","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_port","cc_addr","cc_host","cc_name"))){
+                                    //Überprüfen ob bestimmte Value´s auch werte haben
+                                    if(all_filled($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_host","cc_port"))){
+                                        //Alle in Ordnung
+                                        $erg = $install->stage_1($stage_data);
+                                    }else{
+                                        //Manche Parameter sind leer
+                                    }    
+                                }else{
+                                    //Es sind nicht alle benötigten Parameter gesetzt
+                                } 
+                            }else{
+                                //Es wurde nicht alles Ausgefüllt
+                            }
+                        }else{
+                            //Es sind keine Daten gesendet geworden
+                            $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no additional Data", "title"=>"", "ref"=>"", "error" => "MISSING_DATA"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                        }    
+                    }else if($stage == "2"){                        
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "2.1"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "3"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "3.1"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "3.2"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "4"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "5"){
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else{                        
+                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }
+                    //Löschen des Objekts am ende
+                    $install = null;    
+                    //Rückgabe
+                    $tmp_array = array("content"=>array("main"=>"[IRGEND EINE NACHRICHT]", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"200", "get_url"=>$_GET['json']));
                 }else if($topic == "check"){
                     $do_skip = ($para_array["skip"]!==null ? $para_array['skip'] : "SELF_CHECK");
                     if($do_skip == "SELF_CHECK"){
