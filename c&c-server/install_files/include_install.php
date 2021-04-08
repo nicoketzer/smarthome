@@ -319,27 +319,115 @@ class install{
     public function __constructor(){
         return true;    
     }
+    private function new_downloaded_var_file(){
+        $local_var_file = read_file("res/php/var.php");
+        $remote_var_file = fetch_data("https://raw.githubusercontent.com/nicoketzer/smarthome_cc/main/res/php/var.php");
+        if(trim(strtolower($local_var_file)) == trim(strtolower($remote_var_file))){
+            //Es handelt sich noch um eine "frische" Installation
+            return true;
+        }else{
+            //Es ist schon das x-te Mal das die Installation durchgeführt wird.
+            return false;
+        }
+    }
+    private function fill_into_var($where,$what){
+        $var_file = read_file("res/php/var.php");
+        $tmp = explode($where,$var_file);
+        $new_var_file = $tmp[0];
+        for($i = 1; $i<count($tmp); $i++){
+            $new_var_file .= $what . $tmp[$i];
+        }
+        write_file("/res/php/var.php",$new_var_file,"w");
+        return true;
+    }
     public function stage_1($stage_data){
-        #Zugangsdaten Remote Mysql-Server
-        $mysqli_server = $stage_data["mysqli_server"];
-        $mysqli_bn = $stage_data["mysqli_bn"];
-        $mysqli_pw = $stage_data["mysqli_pw"];
-        $mysqli_db = $stage_data["mysqli_db"];
-        #Zugangsdaten Lokaler Mysql-Server
-        $mysqli_offline_server = ($stage_data["mysqli_offline_server"] !== null ? $stage_data['mysqli_offline_server'] : "localhost");
-        $mysqli_offline_bn = $stage_data["mysqli_offline_bn"];
-        $mysqli_offline_pw = $stage_data["mysqli_offline_pw"];
-        $mysqli_offline_db = $stage_data["mysqli_offline_db"];
-        //Zusätzliche Daten generieren
-        $cc_bind_token = get_bind_token();
-        $cc_cronjob_ident = generate_token();
-        $cc_work_ident = generate_token();
-        $cc_ip_update_token = generate_token();
-        //Adressdaten einfügen
-        $cc_port_extern = $stage_data["cc_port"];
-        $cc_server_addr = ($stage_data["cc_addr"] !== null ? $stage_data['cc_addr'] : "localhost");
-        $cc_server_hostname = $stage_data["cc_host"];
-        $cc_server_name = ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)");
+        if($this->new_downloaded_var_file()){
+            #Zugangsdaten Remote Mysql-Server
+            $mysqli_server = $stage_data["mysqli_server"];
+            $mysqli_bn = $stage_data["mysqli_bn"];
+            $mysqli_pw = $stage_data["mysqli_pw"];
+            $mysqli_db = $stage_data["mysqli_db"];
+            #Zugangsdaten Lokaler Mysql-Server
+            $mysqli_offline_server = ($stage_data["mysqli_offline_server"] !== null ? $stage_data['mysqli_offline_server'] : "localhost");
+            $mysqli_offline_bn = $stage_data["mysqli_offline_bn"];
+            $mysqli_offline_pw = $stage_data["mysqli_offline_pw"];
+            $mysqli_offline_db = $stage_data["mysqli_offline_db"];
+            //Zusätzliche Daten generieren
+            $cc_bind_token = get_bind_token();
+            $cc_cronjob_ident = generate_token();
+            $cc_work_ident = generate_token();
+            $cc_ip_update_token = generate_token();
+            //Adressdaten einfügen
+            $cc_port_extern = $stage_data["cc_port"];
+            $cc_server_addr = ($stage_data["cc_addr"] !== null ? $stage_data['cc_addr'] : "localhost");
+            $cc_server_hostname = $stage_data["cc_host"];
+            $cc_server_name = ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)");
+            
+            //Einfügen in die var.php
+            $this->fill_into_var("__MYSQLI_SERVER__",$mysqli_server);
+            $this->fill_into_var("__MYSQLI_BN__",$mysqli_bn);
+            $this->fill_into_var("__MYSQLI_PW__",$mysqli_pw);
+            $this->fill_into_var("__MYSQLI_DB__",$mysqli_db);
+            $this->fill_into_var("__MYSQLI_OFFLINE_SERVER__",$mysqli_offline_server);
+            $this->fill_into_var("__MYSQLI_OFFLINE_BN__",$mysqli_offline_bn);
+            $this->fill_into_var("__MYSQLI_OFFLINE_PW__",$mysqli_offline_pw);
+            $this->fill_into_var("__MYSQLI_OFFLINE_DB__",$mysqli_offline_db);
+            $this->fill_into_var("__CC_BIND_TOKEN__",$cc_bind_token);
+            $this->fill_into_var("__CC_CRONJOB_IDENT__",$cc_cronjob_ident);
+            $this->fill_into_var("__CC_WORK_IDENT__",$cc_work_ident);
+            $this->fill_into_var("__CC_IP_UPDATE_TOKEN__",$cc_ip_update_token);
+            $this->fill_into_var("__CC_PORT_EXTERN__",$cc_port_extern);
+            $this->fill_into_var("__CC_SERVER_ADDR__",$cc_server_addr);
+            $this->fill_into_var("__CC_SERVER_HOSTNAME__",$cc_server_hostname);
+            $this->fill_into_var("__CC_SERVER_NAME__",$cc_server_name);
+            return "all_ok";
+        }else{
+            //Ersetzen
+            if(read_file("stage") == "1"){
+                write_file("res/php/var.php",fetch_data("https://raw.githubusercontent.com/nicoketzer/smarthome_cc/main/res/php/var.php"),"w");
+                /*
+                 * !ACHTUNG!
+                 * Beim ersetzen der var.php entsteht grundsätzlich ein Risiko da es dadurch zur "feindlichen" übernahme kommen kann.
+                 * Es wird jedoch hier doch durchgeführt da stage_1 nur ausgeführt wird wenn im File "stage" die Zahl 1 steht sprich
+                 * für eine "feindliche" Übernahme müsste der Hacker/Unbefugte Schreibzugriff auf das "stage" File haben und dann kann er 
+                 * so und so schon manipulieren da er ja dann auch auf andere Datein Schreibzugriff hat.
+                 * Es wird vorher auch nochmal abgefragt ob man wirklch in Stage 1 ist 
+                 */
+                 //Den Schritt neu starten
+                 return $this->stage_1($stage_data);
+             }else{
+                 //Sollte dies Klammer hier ausgeführt werden ist Grundsätzlich davon auszugehen das es sich um einen Hacking-Versuch handelt
+                 //Der löscht in diesem Falle die install.php und überschreibt vorher die alle anderen .php datein so das kein weiterer schaden
+                 //verursacht werden kann
+                 write_file("work.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("sync_db.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("stage","'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'","w");
+                 write_file("install.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("index.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("cronjob.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("cronjob.imp.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("all_func.tmp.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/all.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/email.func.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/fb_device_list.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/http_req.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/rw.func.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/sql.func.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 write_file("res/php/var.php","<? echo 'ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde'; exit; ?>","w");
+                 //Beenden mit Kompletter Fehlermeldung
+                 die("ich habe mich selbst deaktiviert da ein hackingversuch festgestellt wurde");
+                 //Sicherheitshalber noch ein exit nicht das die die() Funktion vorher deaktiviert wurde
+                 exit;
+                 //Sicherheitshalbe noch das Skript solange laufen lassen das es mit einem Timeout beendet wird wenn auch die exit-Funktion deaktiviert wurde
+                 //Umsetzung doppelt ausgeführt
+                 for($i = 2; $i = 1; $i = 2){
+                     true;
+                 }
+                 while(true){
+                     true;
+                 }
+             }
+        }
     }
     public function stage_2(){
 
