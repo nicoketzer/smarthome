@@ -74,6 +74,8 @@
                                     if($erg == "all_ok"){
                                         //Rückgabe OK
                                         $tmp_array = array("content"=>array("main"=>"Schritt 1 erfolgreich abgeschlossen","title"=>"Info","ref"=>"1", "error"="NO_ERROR"), "debug"=>array("response_code"=>"200","get_url"=>$_GET['json']));
+                                        //In nächste Stage wechseln
+                                        set_stage("2");
                                     }else{
                                         //Irgendwas ist schief gelaufen
                                         $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="DATA_SET_ERROR"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json'], "return"=>$erg));
