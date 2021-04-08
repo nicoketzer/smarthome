@@ -50,21 +50,7 @@ if(!function_exists("get_bind_token")){
 function get_bind_token(){
     //Erst Generieren lassen
     $bind_token = generate_token() . generate_token();
-    if(!file_exists($bind_token_file)){
-        //Es existiert kein Bind-Token
-        write_file($bind_token_file,$bind_token,"w");
-        return true;
-    }else{
-        //Die Datei existiert es kann aber sein das sie mit dem Standart-Bind Token "0000" gefüllt ist
-        //um das rauszufinden muss sie geöffnet und ausgelesen werden
-        if(read_file($bind_token_file) == "0000"){
-            write_file($bind_token_file,$bind_token,"w");
-            return true;
-        }else{
-            //Es existiert schon ein Bind-Token
-            return false;
-        }
-    }
+    return $bind_token;
 }
 }
 //Move
@@ -262,29 +248,6 @@ function fetch_data($url){
     return $ret_arr;
 }
 }
-//Main-Funktion
-function do_install(){
-    //Als erstes alles Downloaden und entpacken lassen
-    if(new_install()){
-        if(download()){
-            //Jetzt sind alle Datein soweit Verfügbar
-            #Anschließend neuen Bind-Token erstellen
-            if(get_bind_token()){
-                //Bind Token Fertig
-                set_stage(1);
-            }else{
-                //Es konnte kein neuer Bind-Token erzeugt werden
-                echo "Die installation kann keinen neuen Bind-Token erzeugen. Fehlschlag!";
-            }
-        }else{
-            //Download oder Entpacken fehlgeschlagen
-            echo "Die installation konnte nicht gestartet werden da der Download fehlschlug";
-        }
-    }else{
-        echo "install.php kann hier nicht mehr ausgef&uuml;hrt werden";
-        unlink("install.php");
-    }
-}
 function self_test($url){
     $options = array();
     $context = stream_context_create($options);
@@ -302,5 +265,86 @@ function finish_install(){
     unlink("install.php");
     unlink("self_test_url");
 
+}
+if(!function_exists("all_filled")){
+function all_filled($search_arr, $para){
+    if(all_set($search_arr, $para){
+        if(is_array($para)){
+            $all_filled = true;
+            foreach($para as $one_para){
+                if($all_filled){
+                    $all_filled = all_filled($search_arr,$one_para);
+                }else{
+                    break;
+                }
+            }
+            return $all_filled;    
+        }else{
+            if(!empty($search_arr[$para]) && $search_arr[$para] != null && $search_arr != ""){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }else{
+        //Einige Parameter sind nicht mal gesetzt also können sie auch nicht gefüllt sein
+        return false;
+    }
+}
+}
+if(!function_exists("all_set"){
+function all_set($search_arr, $para){
+    if(is_array($para)){
+        $all_set = true;
+        foreach($para as $one_para){
+            if($all_set){
+                $all_set = all_set($search_arr,$one_para);
+            }else{
+                break;
+            }    
+        }
+        return $all_set;    
+    }else{
+        if(isset($search_arr[$para])){
+            return true;
+        }else{
+            return false;
+        }    
+    }
+}
+}
+
+//Implementierung der einzelnen Installations-Step´s über die install - Klasse
+class install{
+    public function __constructor(){
+        return true;    
+    }
+    public function stage_1(){
+
+    }
+    public function stage_2(){
+
+    }
+    public function stage_2_1(){
+
+    }
+    public function stage_3(){
+
+    }
+    public function stage_3_1(){
+
+    }
+    public function stage_3_2(){
+
+    }
+    public function stage_4(){
+
+    }
+    public function stage_5(){
+
+    }
+    public function finish_install(){
+        
+    }
 }
 ?>
