@@ -65,23 +65,28 @@
                         if(isset($para_array["stage_data"]){
                             //Daten auswerten
                             $stage_data = $para_array['stage_data'];
-                            //Sollte bis jetzt 11 Elemente enthalten
-                            if(count($stage_data) == 8){
-                                //Überprüfen ob alle Gesetzt sind
-                                if(all_set($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_server","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_port","cc_addr","cc_host","cc_name"))){
-                                    //Überprüfen ob bestimmte Value´s auch werte haben
-                                    if(all_filled($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_host","cc_port"))){
-                                        //Alle in Ordnung
-                                        $erg = $install->stage_1($stage_data);
+                            //Überprüfen ob alle Gesetzt sind
+                            if(all_set($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_server","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_port","cc_addr","cc_host","cc_name"))){
+                                //Überprüfen ob bestimmte Value´s auch werte haben
+                                if(all_filled($stage_data,array("mysqli_server","mysqli_bn","mysqli_pw","mysqli_db","mysqli_offline_bn","mysqli_offline_pw","mysqli_offline_db","cc_host","cc_port"))){
+                                    //Alle in Ordnung
+                                    $erg = $install->stage_1($stage_data);
+                                    if($erg == "all_ok"){
+                                        //Rückgabe OK
+                                        $tmp_array = array("content"=>array("main"=>"Schritt 1 erfolgreich abgeschlossen","title"=>"Info","ref"=>"1", "error"="NO_ERROR"), "debug"=>array("response_code"=>"200","get_url"=>$_GET['json']));
                                     }else{
-                                        //Manche Parameter sind leer
-                                    }    
+                                        //Irgendwas ist schief gelaufen
+                                        $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="DATA_SET_ERROR"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json'], "return"=>$erg));
+                                    }
                                 }else{
-                                    //Es sind nicht alle benötigten Parameter gesetzt
-                                } 
+                                    //Manche Parameter sind leer
+                                    $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="EMPTY_PARA"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json']));
+                                }    
                             }else{
-                                //Es wurde nicht alles Ausgefüllt
-                            }
+                                //Es sind nicht alle benötigten Parameter gesetzt
+                                $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="MISSING_PARA"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json']);
+                            } 
+                        
                         }else{
                             //Es sind keine Daten gesendet geworden
                             $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no additional Data", "title"=>"", "ref"=>"", "error" => "MISSING_DATA"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
