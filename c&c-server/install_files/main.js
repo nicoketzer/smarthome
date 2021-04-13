@@ -11,9 +11,26 @@ function _(id){
         return document.getElementById("error");
     }
 }
+function load_site(site){
+    $.post(server,para,function(res){
+        if(res != "false"){
+            //Json - Data (kann auch einen Bekannten Fehler enthalten sollte aber eine normale Page sein)
+            
+        }else{
+            //Es trat ein anderer Fehler auf
+            return "Beim laden der Seite trat ein Fehler auf. Bitte versuchen sie es später erneut";
+        }
+    },"text").fail(function(a,b,c){
+        console.log(a);
+        console.log(b);
+        console.log(c);
+        return "Die angeforderte Seite konnte nicht geladen werden";
+    });
+}
 function start_install(){
     f_close_msg();
-    var fillout_form = "";
+    var fillout_form = '';
+    fillout_form = load_site("fillout_form.html");
     show_msg("Daten erforderlich:",fillout_form,false);
 }
 function test_mysql(){
