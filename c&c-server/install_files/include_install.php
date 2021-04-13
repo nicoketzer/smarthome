@@ -502,6 +502,8 @@ class install{
         }
         if($resp_c != "200"){
             set_stage("1");
+        }else{
+            set_stage("2_1");
         }
         return array("content"=>array("main"=>$text, "title"=>$title, "ref"=>$ref, "error"=>$error), "debug"=>array("response_code"=>$resp_c, "get_url"=>$_GET['json']));
     }
