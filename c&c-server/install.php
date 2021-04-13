@@ -93,8 +93,8 @@
                             //Es sind keine Daten gesendet geworden
                             $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no additional Data", "title"=>"", "ref"=>"", "error" => "MISSING_DATA"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                         }    
-                    }else if($stage == "2"){                        
-                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                    }else if($stage == "2"){
+                        $tmp_array = $install->stage_2();
                     }else if($stage == "2.1"){
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }else if($stage == "3"){
