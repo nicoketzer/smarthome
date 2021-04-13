@@ -429,8 +429,81 @@ class install{
              }
         }
     }
+    private function test_mysqli_conn($bn,$pw,$server,$db){
+        if(class_exists("mysqli")){
+            $mysqli = new mysqli($server,$bn,$pw,$db);
+            if($mysqli->connect_errno){
+                $mysqli->close();
+                return false;
+            }else{
+                $mysqli->close();
+                return true;
+            } 
+        }else{
+            //Die PHP installation kann kein MYSQLI --> Skript beenden und entsprechenden Fehler ausgeben
+            #Daten
+            $text = "MYSQLI-Module is not installed or activated. Bitte Installieren sie das Mysqli-Modul f&uuml;r diese PHP installation oder aktivieren sie es &uuml;ber die php.ini Datei. Bitte beachten sie das der Webserver nach anpassung der php.ini neu gestartet werden muss";
+            $title = "Fehler";
+            $ref = "0";
+            $error = "MISSIN_MYSQLI";
+            $resp_c = "500";
+            #Zusammenfügen
+            $tmp_arr = array("content"=>array("main"=>$text, "title"=>$title, "ref"=>$ref, "error"=>$error), "debug"=>array("response_code"=>$resp_c));
+            #Umwandlung JSON
+            $json = json_encode($tmp_arr);
+            #Zurücksetzen auf Stage 1
+            set_stage("1");
+            #Ausgabe
+            echo $json;
+            exit;
+        } 
+    }
     public function stage_2(){
-
+        //Testen der Mysql-Verbindung (remote und lokal)
+        #Einbinden der Var.php
+        include("res/php/var.php");
+        #Holen der Variablen aus var.php
+        global $mysqli_server;
+        global $mysqli_bn;
+        global $mysqli_pw;
+        global $mysqli_db;
+        #Zugangsdaten Lokaler Mysql-Server
+        global $mysqli_offline_server;
+        global $mysqli_offline_bn;
+        global $mysqli_offline_pw;
+        global $mysqli_offline_db;
+        //Testen
+        $erg_remote = $this->test_mysqli_conn($mysqli_bn,$mysqli_pw,$mysqli_server,$mysqli_db);
+        $erg_local = $this->test_mysqli_conn($mysqli_offline_bn,$mysqli_offline_pw,$mysqli_offline_server,$mysqli_offline_db);
+        if($erg_remote && $erg_local){
+            $title = "Info";
+            $text = "Beide Mysqli Verbindungen funktionieren";
+            $res = "1";
+            $error = "NO_ERROR";
+            $resp_c = "200";
+        }else if(!$erg_local && $erg_remote){
+            $title = "Fehler";
+            $text = "Es konnte keine Verbindung zur lokalen Datenbank hergestellt werden. Die Installation wird neu gestartet";
+            $res = "0";
+            $error = "CONNECTION_ERROR_DB_LOCAL";
+            $resp_c = "50*";
+        }else if(!$erg_remote && $erg_local){
+            $title = "Fehler";
+            $text = "Es konnte keine Verbindung zur Remote - Datenbank hergestellt werden. Die Installation wird neu gestartet";
+            $res = "0";
+            $error = "CONNECTION_ERROR_DB_REMOTE";
+            $resp_c = "50*";
+        }else{
+            $title = "Fehler";
+            $text = "Es konnte keine Verbindung zu den Mysql-Servern aufgebaut werden. Bitte &uuml;berpr&uuml;fe deine Konfiguration (inkl. Proxy etc). Die Installation wird neu gestartet";
+            $res = "0";
+            $error = "CONNECTION_ERROR_ALL_DB";
+            $resp_c = "50*";
+        }
+        if($resp_c != "200"){
+            set_stage("1");
+        }
+        return array("content"=>array("main"=>$text, "title"=>$title, "ref"=>$ref, "error"=>$error), "debug"=>array("response_code"=>$resp_c, "get_url"=>$_GET['json']));
     }
     public function stage_2_1(){
 
