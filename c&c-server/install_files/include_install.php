@@ -330,8 +330,8 @@ class install{
             return false;
         }
     }
-    private function fill_into_var($where,$what){
-        $var_file = read_file("res/php/var.php");
+    private function fill_into_file($file,$where,$what){
+        $var_file = read_file($file);
         $tmp = explode($where,$var_file);
         $new_var_file = $tmp[0];
         for($i = 1; $i<count($tmp); $i++){
@@ -364,22 +364,22 @@ class install{
             $cc_server_name = ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)");
             
             //Einfügen in die var.php
-            $this->fill_into_var("__MYSQLI_SERVER__",$mysqli_server);
-            $this->fill_into_var("__MYSQLI_BN__",$mysqli_bn);
-            $this->fill_into_var("__MYSQLI_PW__",$mysqli_pw);
-            $this->fill_into_var("__MYSQLI_DB__",$mysqli_db);
-            $this->fill_into_var("__MYSQLI_OFFLINE_SERVER__",$mysqli_offline_server);
-            $this->fill_into_var("__MYSQLI_OFFLINE_BN__",$mysqli_offline_bn);
-            $this->fill_into_var("__MYSQLI_OFFLINE_PW__",$mysqli_offline_pw);
-            $this->fill_into_var("__MYSQLI_OFFLINE_DB__",$mysqli_offline_db);
-            $this->fill_into_var("__CC_BIND_TOKEN__",$cc_bind_token);
-            $this->fill_into_var("__CC_CRONJOB_IDENT__",$cc_cronjob_ident);
-            $this->fill_into_var("__CC_WORK_IDENT__",$cc_work_ident);
-            $this->fill_into_var("__CC_IP_UPDATE_TOKEN__",$cc_ip_update_token);
-            $this->fill_into_var("__CC_PORT_EXTERN__",$cc_port_extern);
-            $this->fill_into_var("__CC_SERVER_ADDR__",$cc_server_addr);
-            $this->fill_into_var("__CC_SERVER_HOSTNAME__",$cc_server_hostname);
-            $this->fill_into_var("__CC_SERVER_NAME__",$cc_server_name);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_SERVER__",$mysqli_server);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_BN__",$mysqli_bn);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_PW__",$mysqli_pw);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_DB__",$mysqli_db);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_SERVER__",$mysqli_offline_server);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_BN__",$mysqli_offline_bn);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_PW__",$mysqli_offline_pw);
+            $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_DB__",$mysqli_offline_db);
+            $this->fill_into_file("res/php/var.php","__CC_BIND_TOKEN__",$cc_bind_token);
+            $this->fill_into_file("res/php/var.php","__CC_CRONJOB_IDENT__",$cc_cronjob_ident);
+            $this->fill_into_file("res/php/var.php","__CC_WORK_IDENT__",$cc_work_ident);
+            $this->fill_into_file("res/php/var.php","__CC_IP_UPDATE_TOKEN__",$cc_ip_update_token);
+            $this->fill_into_file("res/php/var.php","__CC_PORT_EXTERN__",$cc_port_extern);
+            $this->fill_into_file("res/php/var.php","__CC_SERVER_ADDR__",$cc_server_addr);
+            $this->fill_into_file("res/php/var.php","__CC_SERVER_HOSTNAME__",$cc_server_hostname);
+            $this->fill_into_file("res/php/var.php","__CC_SERVER_NAME__",$cc_server_name);
             return "all_ok";
         }else{
             //Ersetzen
@@ -508,7 +508,41 @@ class install{
         return array("content"=>array("main"=>$text, "title"=>$title, "ref"=>$ref, "error"=>$error), "debug"=>array("response_code"=>$resp_c, "get_url"=>$_GET['json']));
     }
     public function stage_2_1(){
-
+        //Verbinden mit MySQL-Server (remote) und alle Daten des Webinterface-Server´s holen
+        #Einbinden der SQL-Funktionen
+        include("res/php/sql.func.php");
+        #Variablen einbinden
+        include("res/php/var.php");
+        #Verbindung zu Mysql-Server herstellen
+        $mysqli = new_mysqli();
+        #SQL-Befehl
+        $sql = "";
+        #Ergebnis bekommen
+        $erg = start_sql($mysqli,$sql);
+        #In Array umwandeln
+        $arr = sql_result_to_array($erg);
+        #Gleichsetzen
+        $arr = $arr[0];
+        #Daten holen
+        $conn_token = $arr["conn_token"]
+        $this->fill_into_file("res/php/var_tmp.php","__CONN_TOKEN__",$conn_token);
+        #Server - Addresse (egal ob IP oder DDNS bzw. Domain)
+        $server_addr = $arr["server_addr"];
+        $this->fill_into_file("res/php/var_tmp.php","__SERVER_ADDR__",$server_addr);
+        #Kommunikations-Port
+        $server_port = $arr["server_port"];
+        $this->fill_into_file("res/php/var_tmp.php","__SERVER_PORT__",$server_port);
+        #Protukoll (http oder https)
+        $server_prot = $arr['server_prot'];
+        $this->fill_into_file("res/php/var_tmp.php","__SERVER_PROT__",$server_prot);
+        //Fertig nun kann zu Stage 3 gewechselt werden
+        set_stage("2_2");
+    }
+    public function stage_2_2(){
+        //Hier werden die Daten die oben Eingegeben wurden überprüft.
+        //Gibt entweder false oder True zurück und Wartet auf Freischaltung
+        //Des Admin-Token´s über die Weboberfläche.
+        
     }
     public function stage_3(){
 
