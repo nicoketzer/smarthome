@@ -3,3 +3,10 @@ C&C-Server sollen für einen Raspberry-PI ausgelegt sein deswegen:
 RaspberryPI-OS wird verwendet
 Apache2 wird verwendet
 PHP7.3 wird verwendet
+
+
+Sollte Curl Error Code "0" zurückgeben so kann die Adresse nicht aufgelöst werden.
+Dies ist aber bei der Angegebenen Adress nicht möglich das es diese nicht gibt.
+-->Lösung: Der DNS-Service meines Raspi hat sich aus irgend einem Grund aufgehängt
+-->folglich konnte keine Adresse mehr aufgelöst werden. Ein neustart hat den "BUG"
+-->erfolgreich beseitigt.
