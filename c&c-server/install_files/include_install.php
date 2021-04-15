@@ -230,7 +230,18 @@ function valid_json($json) {
 }
 if(!function_exists("fetch_data")){
 function fetch_data($url){
-    $process = curl_init($url);
+    //Random-Parameter
+    $rand_para = time() . "=" . time();
+    //URL AUFBEREITEN SODASS DER RAND-PARAMETER ANGEHÄNGT WERDEN KANN
+    $tmp = explode("?",$url);
+    if(isset($tmp[1])){
+        //Anhängen mit "&"
+        $randomized_url = $url . "&" . $rand_para;
+    }else{
+        //Anhängen mit "?"
+        $randomized_url = $url . "?" . $rand_para;
+    }
+    $process = curl_init($randomized_url);
     curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
     curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
@@ -243,8 +254,7 @@ function fetch_data($url){
       $error = "FETCH_ERROR_".$http_code;
     }
     curl_close($process);
-    echo $response_body;
-    $ret_arr = array("main"=>$response_body,"title"=>"","ref"=>$url,"error"=>$error,"resp_code"=>$http_code);
+    $ret_arr = array("main"=>$response_body,"title"=>"","ref"=>$randomized_url,"error"=>$error,"resp_code"=>$http_code);
     return $ret_arr;
 }
 }
@@ -268,7 +278,7 @@ function finish_install(){
 }
 if(!function_exists("all_filled")){
 function all_filled($search_arr, $para){
-    if(all_set($search_arr, $para){
+    if(all_set($search_arr, $para)){
         if(is_array($para)){
             $all_filled = true;
             foreach($para as $one_para){
@@ -292,7 +302,7 @@ function all_filled($search_arr, $para){
     }
 }
 }
-if(!function_exists("all_set"){
+if(!function_exists("all_set")){
 function all_set($search_arr, $para){
     if(is_array($para)){
         $all_set = true;
@@ -348,7 +358,7 @@ class install{
             $mysqli_pw = $stage_data["mysqli_pw"];
             $mysqli_db = $stage_data["mysqli_db"];
             #Zugangsdaten Lokaler Mysql-Server
-            $mysqli_offline_server = ($stage_data["mysqli_offline_server"] !== null ? $stage_data['mysqli_offline_server'] : "localhost");
+            $mysqli_offline_server = (isset($stage_data['mysqli_offline_server']) ? ($stage_data["mysqli_offline_server"] !== null ? $stage_data['mysqli_offline_server'] : "localhost") : "localhost");
             $mysqli_offline_bn = $stage_data["mysqli_offline_bn"];
             $mysqli_offline_pw = $stage_data["mysqli_offline_pw"];
             $mysqli_offline_db = $stage_data["mysqli_offline_db"];
@@ -359,9 +369,9 @@ class install{
             $cc_ip_update_token = generate_token();
             //Adressdaten einfügen
             $cc_port_extern = $stage_data["cc_port"];
-            $cc_server_addr = ($stage_data["cc_addr"] !== null ? $stage_data['cc_addr'] : "localhost");
+            $cc_server_addr = (isset($stage_data['cc_addr']) ? ($stage_data["cc_addr"] !== null ? $stage_data['cc_addr'] : "localhost") : "localhost");
             $cc_server_hostname = $stage_data["cc_host"];
-            $cc_server_name = ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)");
+            $cc_server_name = (isset($stage_data['cc_name']) ? ($stage_data["cc_name"] !== null ? $stage_data['cc_name'] : "Comand and Controll Server - Smarthome(Default)") : "Comand and Controll Server - Smarthome(Default)");
             
             //Einfügen in die var.php
             $this->fill_into_file("res/php/var.php","__MYSQLI_SERVER__",$mysqli_server);
@@ -524,7 +534,7 @@ class install{
         #Gleichsetzen
         $arr = $arr[0];
         #Daten holen
-        $conn_token = $arr["conn_token"]
+        $conn_token = $arr["conn_token"];
         $this->fill_into_file("res/php/var_tmp.php","__CONN_TOKEN__",$conn_token);
         #Server - Addresse (egal ob IP oder DDNS bzw. Domain)
         $server_addr = $arr["server_addr"];
