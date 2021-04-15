@@ -96,7 +96,10 @@
                     }else if($stage == "2"){
                         $tmp_array = $install->stage_2();
                     }else if($stage == "2_1"){
-                        $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
+                        //Stage 2_1 ist nur dafür da den Admin Token des Server´s zu holen
+                        $install->stage_2_1();
+                    }else if($stage == "2_2"){
+                        
                     }else if($stage == "3"){
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }else if($stage == "3_1"){
