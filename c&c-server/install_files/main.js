@@ -4,6 +4,7 @@
 
 //Ab hier eigene Funktionen etc.
 var server = "[fill_in_server]";
+var side_on = true;
 function _(id){
     if(typeof document.getElementById(id) !== "undefined"){
         return document.getElementById(id);
