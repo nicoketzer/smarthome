@@ -6,18 +6,21 @@
     $dep_file = "all_func.tmp.php";
     if(!file_exists($dep_file)){
         $process = curl_init("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
-        curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache"));
+        curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"));
         curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
         //Damit immer die neuste Version von GitHub gezogen wird
         curl_setopt($process, CURLOPT_FRESH_CONNECT, TRUE);
         $response_body = curl_exec($process);
         $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
-        if($http_code >= 300) {
+        if(intval($http_code) >= 300 || intval($http_code) == 0) {
+            print_r(curl_getinfo($process));
+            echo "<br /><br />";
+            print_r(curl_error($process));
+            echo "<br /><br />";
           die("Unexpected Response Code: ${http_code}: ${response_body}");
         }
         curl_close($process);
-        
         $handle = fopen($dep_file,"w");
         fwrite($handle,$response_body);
         fclose($handle);
@@ -39,7 +42,7 @@
                     //Hier muss ein File-Name gepassed werden
                     if(isset($para_array["url"])){
                         $gh_url = $para_array['url']; 
-                        $content_type = ($para_array['content_type']!==null ? $para_array['content_type'] : 'text/plain');
+                        $content_type = (isset($para_array["content_type"]) ? ($para_array['content_type']!==null ? $para_array['content_type'] : 'text/plain') : "text/plain");
                         //Festlegen das der Zurückgegebene Inhalt diesen Content-Type hat
                         header("Content-Type: " . $content_type);   
                         //Fetchen des GH-URL´s
@@ -50,8 +53,20 @@
                         $resp_r = $fetch_return["ref"];
                         $resp_e = ($fetch_return["error"]=="" ? "NO_ERROR" : $fetch_return['error']);
                         $resp_c = $fetch_return["resp_code"];
+                        #Schauen ob irgentwo der Server eingefügt werden muss
+                        $tmp = explode("__SERVER_ADDR__",$resp_m);
+                        if(isset($tmp[0])){
+                            //Es muss die Server-Adresse eingefügt werden
+                            $resp_m = "";
+                            for($i = 0; $i<=count($tmp)-2; $i++){
+                                #Für alle Gefundenen Elemente die Adresse einfügen
+                                $resp_m .= $tmp[$i]. "//" . $_SERVER['HTTP_HOST'];
+                            }
+                            #Anfügen des Übrigen Restes
+                            $resp_m .= $tmp[count($tmp)-1];
+                        }
                         //Ausgabe der bekommenen Daten und rückgabe
-                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, $error=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url));
+                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, "error"=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url));
                     }else{
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }    
@@ -62,7 +77,7 @@
                     $stage = read_file("stage");
                     if($stage == "1"){
                         //Benutzerangben müssen gemacht werden
-                        if(isset($para_array["stage_data"]){
+                        if(isset($para_array["stage_data"])){
                             //Daten auswerten
                             $stage_data = $para_array['stage_data'];
                             //Überprüfen ob alle Gesetzt sind
@@ -73,20 +88,20 @@
                                     $erg = $install->stage_1($stage_data);
                                     if($erg == "all_ok"){
                                         //Rückgabe OK
-                                        $tmp_array = array("content"=>array("main"=>"Schritt 1 erfolgreich abgeschlossen","title"=>"Info","ref"=>"1", "error"="NO_ERROR"), "debug"=>array("response_code"=>"200","get_url"=>$_GET['json']));
+                                        $tmp_array = array("content"=>array("main"=>"Schritt 1 erfolgreich abgeschlossen","title"=>"Info","ref"=>"1", "error"=>"NO_ERROR"), "debug"=>array("response_code"=>"200","get_url"=>$_GET['json']));
                                         //In nächste Stage wechseln
                                         set_stage("2");
                                     }else{
                                         //Irgendwas ist schief gelaufen
-                                        $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="DATA_SET_ERROR"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json'], "return"=>$erg));
+                                        $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"=>"DATA_SET_ERROR"), "debug"=>array("response_code"=>"50*","get_url"=>$_GET['json'], "return"=>$erg));
                                     }
                                 }else{
                                     //Manche Parameter sind leer
-                                    $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="EMPTY_PARA"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json']));
+                                    $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"=>"EMPTY_PARA"), "debug"=>array("response_code"=>"50*","get_url"=>$_GET['json']));
                                 }    
                             }else{
                                 //Es sind nicht alle benötigten Parameter gesetzt
-                                $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"="MISSING_PARA"), "debug"=>array("response_code"=>"50*","get_url"=$_GET['json']);
+                                $tmp_array = array("content"=>array("main"=>"Es ist ein Fehler aufgetretten","title"=>"!Achtung! Fehler", "ref"=>"0", "error"=>"MISSING_PARA"), "debug"=>array("response_code"=>"50*","get_url"=>$_GET['json']));
                             } 
                         
                         }else{
@@ -147,8 +162,8 @@
         if($topic != "gh_file"){
             echo $json;
         }else{
-            if($tmp_array["error"] == "NO_ERROR"){
-                echo $tmp_array["main"];
+            if($tmp_array["content"]["error"] == "NO_ERROR"){
+                echo $tmp_array["content"]["main"];
             }else{
                 //Bei der Anfrage gab es einen Fehler also wird das TMP-ARRAY
                 //MIT PRINT_R ausgegeben
@@ -162,8 +177,8 @@
 <html>
     <head>
         <title>Installer</title>
-        <script src="install.php?include_file=js&file_name=main.js"></script>
-        <link href="install.php?include_file=css&file_name=style.css" type="text/css" rel="stylesheet" />
+        <script src='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/main.js","content_type":"text\/javascript"}'></script>
+        <link href='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/style.css","content_type":"text\/css"}' type="text/css" rel="stylesheet" />
     </head>
     <body>
         <h1>Installation Command &amp; Controll - Server</h1>
