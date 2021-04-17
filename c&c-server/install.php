@@ -181,17 +181,21 @@
         <link href='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/style.css","content_type":"text\/css"}' type="text/css" rel="stylesheet" />
     </head>
     <body>
-        <h1>Installation Command &amp; Controll - Server</h1>
-        <p>Anschlie&szlig;end wird eine Installation stattfinden. Bitte beachte das die installation nicht unterbrochen werden 
-        darf da ansonsten Fehler auftretten k&ouml;nnen.</p>
-        <br />
-        <p>Vorraussetzungen f&uuml;r eine Reibungslose installation ist eine stabile Internetverbindung.</p>
-        <br />
-        <p>Bitte beachte das f&uuml;r die Installation der Server von Github verwendet wird. Lies dir bitte die 
-        Datenschutzerkl&auml;rung von Github durch. Dies wird gemacht das Installationen immer auf den neusten Dateien basieren 
-        und immer die neuste Version verwendet wird.</p>
-        <p>Gerade wurde alle geforderten Datein f&uuml;r den C&amp;C-Server heruntergeladen.</p>
-        <button id="button" onclick="start_install()">OK, Installation auf diesen Server starten!</button>
+        <div id="main_content">
+            <div id="content">
+                <h1>Installation Command &amp; Controll - Server</h1>
+                <p>Anschlie&szlig;end wird eine Installation stattfinden. Bitte beachte das die installation nicht unterbrochen werden 
+                darf da ansonsten Fehler auftretten k&ouml;nnen.</p>
+                <br />
+                <p>Vorraussetzungen f&uuml;r eine Reibungslose installation ist eine stabile Internetverbindung.</p>
+                <br />
+                <p>Bitte beachte das f&uuml;r die Installation der Server von Github verwendet wird. Lies dir bitte die 
+                Datenschutzerkl&auml;rung von Github durch. Dies wird gemacht das Installationen immer auf den neusten Dateien basieren 
+                und immer die neuste Version verwendet wird.</p>
+                <p>Gerade wurde alle geforderten Datein f&uuml;r den C&amp;C-Server heruntergeladen.</p>
+                <button id="button" onclick="start_install()">OK, Installation auf diesen Server starten!</button>
+            </div>
+        </div>
         <div id="error"></div>
         <div id="msg_all" onclick="close_msg()">
             <div id="msg_self">
