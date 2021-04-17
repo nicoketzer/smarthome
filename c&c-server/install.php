@@ -69,7 +69,7 @@
                             $resp_m .= $tmp[count($tmp)-1];
                         }
                         //Ausgabe der bekommenen Daten und rückgabe
-                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, "error"=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url,"curl_info"=$resp_curl_info,"curl_error"=$resp_curl_error));
+                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, "error"=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url,"curl_info"=>$resp_curl_info,"curl_error"=>$resp_curl_error));
                     }else{
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }    
@@ -188,8 +188,8 @@
 <html>
     <head>
         <title>Installer</title>
-        <script src='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/main.js","content_type":"text\/javascript"}'></script>
-        <link href='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/style.css","content_type":"text\/css"}' type="text/css" rel="stylesheet" />
+        <script src='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/main.js?<?php echo time() . "=" . time(); ?>","content_type":"text\/javascript"}'></script>
+        <link href='install.php?json={"topic":"gh_file","url":"https:\/\/raw.githubusercontent.com\/nicoketzer\/smarthome\/master\/c%26c-server\/install_files\/style.css?<?php echo time() . "=" . time(); ?>","content_type":"text\/css"}' type="text/css" rel="stylesheet" />
     </head>
     <body>
         <div id="main_content">

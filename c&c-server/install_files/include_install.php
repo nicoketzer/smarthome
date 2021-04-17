@@ -259,7 +259,7 @@ function fetch_data($url){
     }
     curl_close($process);
     $title = ($error == "" ? "Info" : "Fehler");
-    $ret_arr = array("main"=>$response_body,"title"=>$title,"ref"=>$randomized_url,"error"=>$error,"resp_code"=>$http_code,"curl_info"=$curl_info,"curl_error"=$curl_error);
+    $ret_arr = array("main"=>$response_body,"title"=>$title,"ref"=>$randomized_url,"error"=>$error,"resp_code"=>$http_code,"curl_info"=>$curl_info,"curl_error"=>$curl_error);
     return $ret_arr;
 }
 }

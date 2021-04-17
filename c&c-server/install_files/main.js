@@ -30,7 +30,7 @@ function load_site(url, filetype){
     var send_json = JSON.stringify(send_array);
     var para = 'json='+send_json;
     $.post(server,para,function(res){
-        if(isvalidJSON(res){
+        if(isvalidJSON(res)){
             //Json - Data (kann auch einen Bekannten Fehler enthalten sollte aber eine normale Page sein)
             var obj = JSON.parse(res);
             var content = obj.content;
