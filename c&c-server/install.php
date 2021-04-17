@@ -5,7 +5,8 @@
     //Download der Funktionen falls noch nicht geschehen
     $dep_file = "all_func.tmp.php";
     if(!file_exists($dep_file)){
-        $process = curl_init("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php");
+        $rand_para = time() . "=" . time();
+        $process = curl_init("https://raw.githubusercontent.com/nicoketzer/smarthome/master/c%26c-server/install_files/include_install.php?".$rand_para);
         curl_setopt($process, CURLOPT_HTTPHEADER, array ('content-type: text/plain',"Cache-Control: no-cache","User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"));
         curl_setopt($process, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($process, CURLOPT_RETURNTRANSFER, TRUE);
