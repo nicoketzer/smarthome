@@ -45,7 +45,7 @@ function load_site(url, filetype){
             }else{
                 if(error == "JSON_ERROR"){
                     var json_string = debug.get_url;
-                    show_msg(error,main+"<br />Fehler JSON:<br /><textarea>"+json_string+"</textarea>",true;    
+                    show_msg(error,main+"<br />Fehler JSON:<br /><textarea>"+json_string+"</textarea>",true);    
                 }else{
                     show_msg(error,res,true);    
                 }
