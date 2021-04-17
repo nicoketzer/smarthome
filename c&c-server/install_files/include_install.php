@@ -387,10 +387,6 @@ class install{
             $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_BN__",$mysqli_offline_bn);
             $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_PW__",$mysqli_offline_pw);
             $this->fill_into_file("res/php/var.php","__MYSQLI_OFFLINE_DB__",$mysqli_offline_db);
-            $this->fill_into_file("res/php/var.php","__CC_BIND_TOKEN__",$cc_bind_token);
-            $this->fill_into_file("res/php/var.php","__CC_CRONJOB_IDENT__",$cc_cronjob_ident);
-            $this->fill_into_file("res/php/var.php","__CC_WORK_IDENT__",$cc_work_ident);
-            $this->fill_into_file("res/php/var.php","__CC_IP_UPDATE_TOKEN__",$cc_ip_update_token);
             $this->fill_into_file("res/php/var.php","__CC_PORT_EXTERN__",$cc_port_extern);
             $this->fill_into_file("res/php/var.php","__CC_SERVER_ADDR__",$cc_server_addr);
             $this->fill_into_file("res/php/var.php","__CC_SERVER_HOSTNAME__",$cc_server_hostname);
