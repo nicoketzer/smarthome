@@ -53,6 +53,8 @@
                         $resp_r = $fetch_return["ref"];
                         $resp_e = ($fetch_return["error"]=="" ? "NO_ERROR" : $fetch_return['error']);
                         $resp_c = $fetch_return["resp_code"];
+                        $resp_curl_error = $fetch_return["curl_error"];
+                        $resp_curl_info = $fetch_return["curl_info"];
                         #Schauen ob irgentwo der Server eingefügt werden muss
                         $tmp = explode("__SERVER_ADDR__",$resp_m);
                         if(isset($tmp[0])){
@@ -60,13 +62,13 @@
                             $resp_m = "";
                             for($i = 0; $i<=count($tmp)-2; $i++){
                                 #Für alle Gefundenen Elemente die Adresse einfügen
-                                $resp_m .= $tmp[$i]. "//" . $_SERVER['HTTP_HOST'];
+                                $resp_m .= $tmp[$i] . $_SERVER['HTTP_HOST'];
                             }
                             #Anfügen des Übrigen Restes
                             $resp_m .= $tmp[count($tmp)-1];
                         }
                         //Ausgabe der bekommenen Daten und rückgabe
-                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, "error"=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url));
+                        $tmp_array = array("content"=>array("main"=>$resp_m, "title"=>$resp_t, "ref"=>$resp_r, "error"=>$resp_e), "debug"=>array("response_code"=>$resp_c,"get_url"=>$_GET['json'],"gh_url"=>$gh_url,"curl_info"=$resp_curl_info,"curl_error"=$resp_curl_error));
                     }else{
                         $tmp_array = array("content"=>array("main"=>"You passed a JSON-String with no URL", "title"=>"", "ref"=>"", "error" => "JSON_ERROR"), "debug"=>array("response_code"=>"50*", "get_url"=>$_GET['json']));
                     }    
@@ -163,7 +165,15 @@
             echo $json;
         }else{
             if($tmp_array["content"]["error"] == "NO_ERROR"){
-                echo $tmp_array["content"]["main"];
+                if(!isset($para_array["json_back"])){
+                    echo $tmp_array["content"]["main"];
+                }else{
+                    if($para_array['json_back'] == "true"){
+                        echo $json;
+                    }else{
+                        echo $tmp_array['content']['main'];
+                    }
+                }
             }else{
                 //Bei der Anfrage gab es einen Fehler also wird das TMP-ARRAY
                 //MIT PRINT_R ausgegeben
