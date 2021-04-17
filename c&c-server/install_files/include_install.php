@@ -250,11 +250,16 @@ function fetch_data($url){
     $response_body = curl_exec($process);
     $http_code = curl_getinfo($process, CURLINFO_HTTP_CODE);
     $error = "";
+    $curl_info = curl_getinfo($process);
+    $curl_error = "";
     if($http_code >= 300) {
-      $error = "FETCH_ERROR_".$http_code;
+        $curl_info = curl_getinfo($process);
+        $curl_error = curl_error($process);
+        $error = "FETCH_ERROR";
     }
     curl_close($process);
-    $ret_arr = array("main"=>$response_body,"title"=>"","ref"=>$randomized_url,"error"=>$error,"resp_code"=>$http_code);
+    $title = ($error == "" ? "Info" : "Fehler");
+    $ret_arr = array("main"=>$response_body,"title"=>$title,"ref"=>$randomized_url,"error"=>$error,"resp_code"=>$http_code,"curl_info"=$curl_info,"curl_error"=$curl_error);
     return $ret_arr;
 }
 }
