@@ -11,12 +11,19 @@
     margin: auto;
     width: 21cm;
     min-width: 21cm;
-    padding: 20px;
     padding-top: 40px;
     display: block;
 }
-#main_content button{
+#content button{
     margin-top: 10px;
+}
+#content{
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.4);
+    padding-top: 1.3cm;
+    padding-left: 1.8cm;
+    padding-right: 1.8cm;
+    padding-bottom: 1.3cm;
 }
 html {
  background: lightgray;
@@ -136,4 +143,3 @@ a:hover {
 #button:disabled{
     cursor: no-drop !important;
 }
-
