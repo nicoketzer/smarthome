@@ -1,5 +1,5 @@
 # Own Smart-Home System
-##Version 1.1
+## Version 1.1
 Da sich wärend der Entwicklung des Systems Webserver->CC-Server->Gerät probleme mit Verzögerung etc. ergeben haben wird nun am Ursprünglichen Design festgehalten.
 
 Jeder CC-Server ist eigenständig und hat auch eine eigenständige Benutzerverwaltung etc.
