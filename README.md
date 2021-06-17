@@ -1,4 +1,17 @@
 # Own Smart-Home System
+##Version 1.1
+Da sich wärend der Entwicklung des Systems Webserver->CC-Server->Gerät probleme mit Verzögerung etc. ergeben haben wird nun am Ursprünglichen Design festgehalten.
+
+Jeder CC-Server ist eigenständig und hat auch eine eigenständige Benutzerverwaltung etc.
+Zu jedem CC-Server können Geräte hinzugefügt, gelöscht und geändert werden.
+
+Für den Betrieb des Smarthome-Systems wird keine Internetverbindung mehr benötigt! 
+Das Smarthome-System kann somit in einem eigenen Netz betrieben werden.
+
+Ein CC-Server kann (muss aber nicht) mit einem Webinterface verbunden werden. Ein Webinterface kann auch mehrere CC-Server bedienen.
+
+
+Veraltet:
 ## Smarthome Allgemeine Info´s
 
 Momentan noch nicht Fertig!
