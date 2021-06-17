@@ -10,6 +10,7 @@ Das Smarthome-System kann somit in einem eigenen Netz betrieben werden.
 
 Ein CC-Server kann (muss aber nicht) mit einem Webinterface verbunden werden. Ein Webinterface kann auch mehrere CC-Server bedienen.
 
+Die Haupt-Programmierarbeit findet deswegen nun im "smarthome_cc"-Repo statt. 
 
 Veraltet:
 ## Smarthome Allgemeine Info´s
